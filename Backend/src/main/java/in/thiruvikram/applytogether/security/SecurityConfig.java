@@ -46,8 +46,10 @@ public class SecurityConfig {
                                 .authorizeHttpRequests(auth -> auth
                                                 // Public endpoints
                                                 .requestMatchers("/api/auth/**").permitAll()
-                                                .requestMatchers("/api/health").permitAll()
-                                                .requestMatchers(HttpMethod.GET, "/api/jobs/**").permitAll()
+                                                .requestMatchers("/actuator/health").permitAll()
+                                                .requestMatchers(HttpMethod.GET, "/api/jobs", "/api/jobs/user/**",
+                                                                "/api/jobs/{id}")
+                                                .permitAll()
                                                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
                                                 // Admin-only endpoints

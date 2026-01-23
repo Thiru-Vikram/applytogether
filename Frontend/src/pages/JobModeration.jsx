@@ -113,7 +113,7 @@ const JobModeration = () => {
                 <div className="d-flex align-items-center justify-content-between">
                     <div>
                         <p className="text-secondary small fw-bold mb-1 text-uppercase tracking-wider">{title}</p>
-                        <h2 className="fw-black mb-0">{value}</h2>
+                        <h2 className="fw-black mb-0 text-capitalize">{value}</h2>
                     </div>
                     <div className={`p-3 rounded-4 bg-${color}-light text-${color}`}>
                         <i className={`bi bi-${icon} fs-3`}></i>
