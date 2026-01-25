@@ -277,7 +277,7 @@ const Profile = () => {
     return (
         <Container className="py-5">
             {/* Profile Header */}
-            <div className="mb-5">
+            <div className="mb-4">
                 <Card className="border-0 shadow-sm rounded-4 overflow-hidden position-relative">
                     <Card.Body className="p-4">
                         <div className="d-flex flex-column flex-md-row align-items-center gap-4">
@@ -364,6 +364,52 @@ const Profile = () => {
                     </Card.Body>
                 </Card>
             </div>
+
+            {/* Additional Information Card */}
+            <Row className="mb-4">
+                <Col md={12}>
+                    <Card className="border-0 shadow-sm rounded-4">
+                        <Card.Body className="p-4">
+                            <h5 className="fw-bold mb-3 d-flex align-items-center">
+                                <i className="bi bi-info-circle-fill text-primary me-2"></i>
+                                Professional Information
+                            </h5>
+                            <Row className="g-4">
+                                <Col md={6}>
+                                    <div className="d-flex align-items-center mb-1">
+                                        <i className="bi bi-mortarboard text-secondary me-2"></i>
+                                        <span className="text-secondary small fw-bold text-uppercase">College</span>
+                                    </div>
+                                    <p className="fw-bold mb-0 text-dark">{profileUser.collegeName || 'Not updated'}</p>
+                                </Col>
+                                <Col md={6}>
+                                    <div className="d-flex align-items-center mb-1">
+                                        <i className="bi bi-book text-secondary me-2"></i>
+                                        <span className="text-secondary small fw-bold text-uppercase">Department</span>
+                                    </div>
+                                    <p className="fw-bold mb-0 text-dark">{profileUser.department || 'Not updated'}</p>
+                                </Col>
+                                <Col md={6}>
+                                    <div className="d-flex align-items-center mb-1">
+                                        <i className="bi bi-geo-alt text-secondary me-2"></i>
+                                        <span className="text-secondary small fw-bold text-uppercase">Location</span>
+                                    </div>
+                                    <p className="fw-bold mb-0 text-dark">
+                                        {profileUser.city ? `${profileUser.city}, ${profileUser.state}` : 'Not updated'}
+                                    </p>
+                                </Col>
+                                <Col md={6}>
+                                    <div className="d-flex align-items-center mb-1">
+                                        <i className="bi bi-calendar-event text-secondary me-2"></i>
+                                        <span className="text-secondary small fw-bold text-uppercase">Passing Year</span>
+                                    </div>
+                                    <p className="fw-bold mb-0 text-dark">{profileUser.passingYear || 'N/A'}</p>
+                                </Col>
+                            </Row>
+                        </Card.Body>
+                    </Card>
+                </Col>
+            </Row>
 
             <hr className="my-5" />
 
