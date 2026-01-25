@@ -35,6 +35,12 @@ public class User {
     @Column(name = "passing_year")
     private String passingYear;
 
+    @Column(name = "college_name")
+    private String collegeName;
+
+    private String department;
+    private String state;
+    private String city;
 
     @CreationTimestamp
     @Column(updatable = false)
@@ -47,7 +53,8 @@ public class User {
     }
 
     public User(Long id, String username, String email, String password, String role, String fullName, String gender,
-            String passingYear, LocalDateTime createdAt, LocalDateTime updatedAt) {
+            String passingYear, String collegeName, String department, String state, String city,
+            LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -56,6 +63,10 @@ public class User {
         this.fullName = fullName;
         this.gender = gender;
         this.passingYear = passingYear;
+        this.collegeName = collegeName;
+        this.department = department;
+        this.state = state;
+        this.city = city;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -124,6 +135,37 @@ public class User {
         this.passingYear = passingYear;
     }
 
+    public String getCollegeName() {
+        return collegeName;
+    }
+
+    public void setCollegeName(String collegeName) {
+        this.collegeName = collegeName;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
