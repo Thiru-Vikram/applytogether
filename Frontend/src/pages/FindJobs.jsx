@@ -175,90 +175,50 @@ const FindJobs = () => {
         </Col>
       </Row>
 
-      <Row className="g-4">
-        {/* Filter Sidebar */}
-        <Col lg={3} className="d-none d-lg-block">
-          <div className="glass-sidebar shadow-sm">
-            <div className="d-flex justify-content-between align-items-center mb-3">
-              <h6 className="fw-bold mb-0">
-                <i className="bi bi-funnel me-2"></i>Filters
-              </h6>
-              {activeFiltersCount > 0 && (
-                <Button 
-                  variant="link" 
-                  size="sm"
-                  className="p-0 text-decoration-none"
-                  onClick={() => {
+      {/* Sticky Filter Bar */}
+      <div className="sticky-filter-bar d-flex align-items-center justify-content-between flex-wrap gap-3">
+        <div className="d-flex align-items-center gap-3">
+            <div className="d-flex align-items-center text-secondary fw-bold bg-white px-3 py-2 rounded-3 border">
+                <i className="bi bi-funnel-fill me-2 text-primary"></i>
+                <span>Filters</span>
+            </div>
+            
+            <div className="d-flex gap-2 flex-wrap">
+                {['Full-time', 'Internship', 'Hackathon'].map(type => (
+                    <Button 
+                        key={type}
+                        variant={selectedJobTypes.includes(type) ? 'primary' : 'light'}
+                        size="sm"
+                        className={`rounded-pill px-3 fw-bold ${!selectedJobTypes.includes(type) ? 'bg-white border' : ''}`}
+                        onClick={() => handleJobTypeChange(type)}
+                    >
+                        {type}
+                    </Button>
+                ))}
+            </div>
+
+
+        </div>
+
+        <div className="d-flex align-items-center gap-2">
+             <span className="text-secondary small fw-bold">{filteredJobs.length} Jobs Found</span>
+             {activeFiltersCount > 0 && (
+                <Button variant="link" size="sm" className="text-danger text-decoration-none fw-bold" onClick={() => {
                     setSearchKeywords('');
                     setSelectedJobTypes([]);
                     setSelectedDate(null);
                     setSelectedBatchYear('');
-                  }}
-                >
-                  <i className="bi bi-x-circle me-1"></i>Clear All
+                }}>
+                    Clear
                 </Button>
-              )}
-            </div>
+             )}
+        </div>
+      </div>
+
+      {/* Main Job Feed */}
+      <Row className="g-4 justify-content-center">
+            {error && <Col xs={12}><Alert variant="danger">{error}</Alert></Col>}
             
-            <div className="mb-4">
-              <h6 className="filter-section-title">
-                <i className="bi bi-briefcase"></i> Job Type
-              </h6>
-              {['Full-time', 'Part-time', 'Contract', 'Internship'].map(type => (
-                <Form.Check 
-                  key={type}
-                  type="checkbox"
-                  id={`type-${type}`}
-                  label={type}
-                  className="mb-2"
-                  checked={selectedJobTypes.includes(type)}
-                  onChange={() => handleJobTypeChange(type)}
-                />
-              ))}
-            </div>
-
-            <div className="mb-4">
-              <h6 className="filter-section-title mt-4">
-                <i className="bi bi-calendar-event"></i> Job Calendar
-              </h6>
-              <div className="calendar-container bg-white rounded-3 p-2 shadow-sm border">
-                <Calendar 
-                  onChange={setSelectedDate} 
-                  value={selectedDate}
-                  tileContent={({ date, view }) => {
-                    if (view === 'month') {
-                      const hasJobs = jobs.some(job => 
-                        job.postedDate && isSameDay(parseISO(job.postedDate), date)
-                      );
-                      return hasJobs ? <span className="dot-indicator"></span> : null;
-                    }
-                  }}
-                />
-              </div>
-              {selectedDate && (
-                <Button 
-                  variant="link" 
-                  className="p-0 mt-2 text-decoration-none text-sm"
-                  onClick={() => setSelectedDate(null)}
-                >
-                  <i className="bi bi-x-circle me-1"></i> Clear date filter
-                </Button>
-              )}
-            </div>
-          </div>
-        </Col>
-
-        {/* Job List */}
-        <Col lg={9}>
-          {error && <Alert variant="danger">{error}</Alert>}
-          
-          <div className="d-flex justify-content-between align-items-center mb-4">
-            <h5 className="fw-bold mb-0">
-                My Feed
-            </h5>
-          </div>
-
-          <Row className="g-4">
             {filteredJobs.length === 0 ? (
                   <Col xs={12}>
                     <div className="text-center py-5 bg-white rounded-4 shadow-sm border-0">
@@ -271,107 +231,65 @@ const FindJobs = () => {
                           ? "Try adjusting your filters to see more results" 
                           : "No jobs available in your feed right now. Check back later!"}
                       </p>
-                      {activeFiltersCount > 0 && (
-                        <Button 
-                          variant="primary" 
-                          className="rounded-pill px-4"
-                          onClick={() => {
-                            setSearchKeywords('');
-                            setSearchLocation('');
-                            setSelectedJobTypes([]);
-                            setSelectedDate(null);
-                            setSelectedBatchYear('');
-                          }}
-                        >
-                          <i className="bi bi-arrow-counterclockwise me-2"></i>Clear all filters
-                        </Button>
-                      )}
                     </div>
                   </Col>
                 ) : (
                   filteredJobs.map((job) => (
                     <Col key={job.id} xs={12}>
-                      <Card className="border-0 shadow-sm hover-shadow transition rounded-4" style={{ overflow: 'hidden' }}>
-                        <Card.Body className="p-4">
-                          <Row className="align-items-center">
-                            <Col xs="auto">
-                              <div 
-                                className="rounded-circle d-flex justify-content-center align-items-center text-white fw-bold shadow-sm" 
-                                style={{ 
-                                  width: '56px', 
-                                  height: '56px', 
-                                  fontSize: '1.5rem',
-                                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-                                }}
-                              >
-                                {job.company.charAt(0).toUpperCase()}
-                              </div>
-                            </Col>
+                      <Card className="job-card-modern p-2">
+                        <Card.Body>
+                          <Row className="align-items-center g-3">
+
                             <Col>
-                              <div className="d-flex justify-content-between align-items-start">
-                                <div>
-                                  <h5 className="fw-bold mb-1">{job.title}</h5>
-                                  <p className="text-secondary mb-1">
-                                    <span className="text-primary fw-bold">{job.company}</span>
-                                    <span className="mx-2">•</span>
-                                    <span>{job.location || 'Remote'}</span>
-                                  </p>
-                                  {job.postedBy && (
-                                    <p className="mb-0 small">
-                                      Posted by: <Link to={`/u/${job.postedBy.id}`} className="text-decoration-none fw-bold text-primary">@{job.postedBy.username}</Link>
-                                    </p>
-                                  )}
+                                <div className="d-flex justify-content-between align-items-start mb-2">
+                                    <h5 className="job-title-large mb-0">{job.title}</h5>
+                                    {/* Action Buttons Desktop */}
+                                    <div className="d-none d-md-flex gap-2">
+                                        {appliedJobIds.includes(job.id) ? (
+                                            <Badge bg="success" className="d-flex align-items-center px-3 py-2 rounded-pill">
+                                                <i className="bi bi-check-circle me-2"></i> Applied
+                                            </Badge>
+                                        ) : (
+                                            <Button variant="primary" size="sm" className="rounded-pill px-4" href={job.jobUrl} target="_blank">
+                                                Apply Now
+                                            </Button>
+                                        )}
+                                    </div>
                                 </div>
-                                <div className="d-flex gap-2 flex-wrap justify-content-end">
-                                    {job.batchYear && job.batchYear !== 'All' && (
-                                        <Badge bg="warning" text="dark" className="rounded-pill px-3 py-2">
-                                            Batch: {job.batchYear}
-                                        </Badge>
-                                    )}
-                                    <Badge 
-                                      bg={job.jobType === 'Full-time' ? 'success' : job.jobType === 'Internship' ? 'info' : 'secondary'} 
-                                      className="rounded-pill px-3 py-2"
-                                    >
+                                
+                                <div className="d-flex align-items-center flex-wrap gap-3 mb-2">
+                                    <span className="fw-bold text-dark">{job.company}</span>
+                                    <span className="text-secondary small">•</span>
+                                    <span className="text-secondary small">
+                                        <i className="bi bi-geo-alt me-1"></i>{job.location || 'Remote'}
+                                    </span>
+                                    <span className="text-secondary small">•</span>
+                                    <Badge bg="light" text="dark" className="border fw-normal">
                                         {job.jobType}
                                     </Badge>
+                                    {job.batchYear && job.batchYear !== 'All' && (
+                                        <Badge bg="light" text="dark" className="border fw-normal">
+                                            {job.batchYear}
+                                        </Badge>
+                                    )}
                                 </div>
-                              </div>
-                              
-                              <div className="mt-3 d-flex align-items-center gap-3">
-                                <small className="text-secondary">
-                                  <i className="bi bi-calendar3 me-1"></i>
-                                  {new Date(job.postedDate).toLocaleDateString('en-GB')}
-                                </small>
-                                <small className="text-secondary text-uppercase fw-bold letter-spacing-1" style={{ fontSize: '0.7rem' }}>
-                                  <i className="bi bi-mortarboard me-1"></i>
-                                  {job.batchYear || 'All Batches'}
-                                </small>
-                                <div className="ms-auto d-flex gap-2">
-                                  {appliedJobIds.includes(job.id) ? (
-                                    <Badge bg="success" className="d-flex align-items-center px-3 rounded-pill">
-                                      <i className="bi bi-check-circle me-2"></i> Applied
-                                    </Badge>
-                                  ) : (
-                                    <>
-                                      <Button 
-                                        variant="outline-primary" 
-                                        className="rounded-pill px-4"
-                                        href={job.jobUrl}
-                                        target="_blank"
-                                      >
-                                        Apply Now
-                                      </Button>
-                                      <Button 
-                                        variant="primary" 
-                                        className="rounded-pill px-4 shadow-sm"
-                                        onClick={() => handleMarkApplied(job.id)}
-                                      >
-                                        Mark as Done
-                                      </Button>
-                                    </>
-                                  )}
+
+                                <div className="d-flex align-items-center gap-2 text-secondary" style={{ fontSize: '0.85rem' }}>
+                                    <span>Posted {new Date(job.postedDate).toLocaleDateString()}</span>
+                                    {job.postedBy && (
+                                        <>
+                                            <span>•</span>
+                                            <span>by @{job.postedBy.username}</span>
+                                        </>
+                                    )}
                                 </div>
-                              </div>
+                                
+                                {/* Mobile Actions */}
+                                <div className="d-flex d-md-none gap-2 mt-3">
+                                    <Button variant="primary" size="sm" className="w-100 rounded-pill" href={job.jobUrl} target="_blank">
+                                        Apply
+                                    </Button>
+                                </div>
                             </Col>
                           </Row>
                         </Card.Body>
@@ -379,9 +297,6 @@ const FindJobs = () => {
                     </Col>
                   ))
                 )}
-          </Row>
-
-        </Col>
       </Row>
     </Container>
   );

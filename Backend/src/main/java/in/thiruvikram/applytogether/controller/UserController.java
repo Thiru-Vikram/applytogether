@@ -30,8 +30,8 @@ public class UserController {
     @GetMapping("/search")
     public ResponseEntity<java.util.List<User>> searchUsers(@RequestParam String query) {
         java.util.List<User> users = userRepository
-                .findByUsernameContainingIgnoreCaseOrFullNameContainingIgnoreCaseOrCollegeNameContainingIgnoreCase(
-                        query, query, query);
+                .findByUsernameContainingIgnoreCaseOrFullNameContainingIgnoreCase(
+                        query, query);
         return ResponseEntity.ok(users);
     }
 }

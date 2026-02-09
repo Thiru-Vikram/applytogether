@@ -49,10 +49,6 @@ public class AuthService {
                 user.setFullName(request.getFullName());
                 user.setGender(request.getGender());
                 user.setPassingYear(request.getPassingYear());
-                user.setCollegeName(request.getCollegeName());
-                user.setDepartment(request.getDepartment());
-                user.setState(request.getState());
-                user.setCity(request.getCity());
 
                 userRepository.save(user);
 

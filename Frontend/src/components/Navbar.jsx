@@ -75,7 +75,6 @@ const Navbar = () => {
                     className="ms-3"
                 >
                     <NavDropdown.Header>{user.username}</NavDropdown.Header>
-                    {/* <NavDropdown.Item as={Link} to={`/u/${user.userId}`}>My Profile</NavDropdown.Item> */}
                     <NavDropdown.Divider />
                     <NavDropdown.Item onClick={handleLogout} className="text-danger">Logout</NavDropdown.Item>
                 </NavDropdown>

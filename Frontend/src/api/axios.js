@@ -1,11 +1,10 @@
 import axios from 'axios';
 
-const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+// Use environment variable or fallback to localhost
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api';
 
 const api = axios.create({
-  baseURL: isLocal
-    ? 'http://localhost:8080/api'
-    : 'https://applytogether-backend.up.railway.app/api',
+  baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },

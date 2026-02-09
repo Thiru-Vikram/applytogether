@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import FindJobs from './pages/FindJobs';
@@ -16,66 +16,88 @@ import AdminDashboard from './pages/AdminDashboard';
 import UserManagement from './pages/UserManagement';
 import JobModeration from './pages/JobModeration';
 
+function AppContent() {
+  const location = useLocation();
+  // Define paths where the ad sidebar should be hidden
+  const hideAdPaths = ['/', '/login', '/register'];
+  const showAds = !hideAdPaths.includes(location.pathname);
+
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Navbar />
+      
+      <div className={`app-layout ${!showAds ? 'no-ads' : ''}`}>
+        <main className="main-content">
+          <Routes>
+            <Route path="/" element={<Landing />} />
+            <Route path="/jobs" element={
+              <ProtectedRoute>
+                <FindJobs />
+              </ProtectedRoute>
+            } />
+            <Route path="/applications" element={
+              <ProtectedRoute>
+                <Applications />
+              </ProtectedRoute>
+            } />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/post-job" element={
+              <ProtectedRoute>
+                <PostJob />
+              </ProtectedRoute>
+            } />
+            <Route path="/add-admin" element={
+              <ProtectedRoute adminOnly={true}>
+                <AddAdmin />
+              </ProtectedRoute>
+            } />
+            <Route path="/admin/dashboard" element={
+              <ProtectedRoute adminOnly={true}>
+                <AdminDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/admin/users" element={
+              <ProtectedRoute adminOnly={true}>
+                <UserManagement />
+              </ProtectedRoute>
+            } />
+            <Route path="/admin/jobs" element={
+              <ProtectedRoute adminOnly={true}>
+                <JobModeration />
+              </ProtectedRoute>
+            } />
+            
+            <Route path="/u/:userId" element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            } />
+            <Route path="/search" element={
+              <ProtectedRoute>
+                <SearchUsers />
+              </ProtectedRoute>
+            } />
+          </Routes>
+        </main>
+
+        {showAds && (
+          <aside className="ad-sidebar ad-sidebar-right">
+            <div className="ad-placeholder">
+              <span>Ad Space</span>
+            </div>
+          </aside>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function App() {
   return (
     <Router>
       <AuthProvider>
-        <div className="min-h-screen">
-          <Navbar />
-          <main>
-            <Routes>
-              <Route path="/" element={<Landing />} />
-              <Route path="/jobs" element={
-                <ProtectedRoute>
-                  <FindJobs />
-                </ProtectedRoute>
-              } />
-              <Route path="/applications" element={
-                <ProtectedRoute>
-                  <Applications />
-                </ProtectedRoute>
-              } />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/post-job" element={
-                <ProtectedRoute>
-                  <PostJob />
-                </ProtectedRoute>
-              } />
-              <Route path="/add-admin" element={
-                <ProtectedRoute adminOnly={true}>
-                  <AddAdmin />
-                </ProtectedRoute>
-              } />
-              <Route path="/admin/dashboard" element={
-                <ProtectedRoute adminOnly={true}>
-                  <AdminDashboard />
-                </ProtectedRoute>
-              } />
-              <Route path="/admin/users" element={
-                <ProtectedRoute adminOnly={true}>
-                  <UserManagement />
-                </ProtectedRoute>
-              } />
-              <Route path="/admin/jobs" element={
-                <ProtectedRoute adminOnly={true}>
-                  <JobModeration />
-                </ProtectedRoute>
-              } />
-              
-              <Route path="/u/:userId" element={
-                <ProtectedRoute>
-                  <Profile />
-                </ProtectedRoute>
-              } />
-              <Route path="/search" element={
-                <ProtectedRoute>
-                  <SearchUsers />
-                </ProtectedRoute>
-              } />
-            </Routes>
-          </main>
-        </div>
+        <AppContent />
       </AuthProvider>
     </Router>
   );

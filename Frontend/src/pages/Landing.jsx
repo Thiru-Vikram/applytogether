@@ -6,7 +6,7 @@ import { useAuth } from '../context/AuthContext';
 const Landing = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [activeWord, setActiveWord] = useState('Together');
+  const [activeWord, setActiveWord] = useState('With Friends');
   const [stats, setStats] = useState({ jobs: 0, users: 0, applied: 0 });
 
   useEffect(() => {
@@ -19,7 +19,7 @@ const Landing = () => {
       }
     }
   }, [user, navigate]);
-  const words = ['FASTER'];
+  const words = ['With Friends'];
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -51,22 +51,21 @@ const Landing = () => {
         <Container>
           <Row className="align-items-center g-5">
             <Col lg={7} className="text-center text-lg-start">
-              <h1 className="display-1 fw-black mb-4 tracking-tight fade-in" style={{ color: '#0f172a', lineHeight: '1' }}>
-                Landing Jobs <br />
-                <span className="text-gradient">
+              <h1 className="display-1 fw-black mb-4 tracking-tight fade-in" style={{ color: '#0f172a', lineHeight: '1.2' }}>
+                Find your next job<br />
+                <span className="text-gradient" style={{ paddingRight: '0.2em', paddingBottom: '0.1em' }}>
                   {activeWord}
                 </span>
               </h1>
               <p className="lead text-secondary mb-5 pe-lg-5 fade-in" style={{ fontSize: '1.2rem', animationDelay: '0.1s' }}>
-                The ultimate companion for your job search. Track applications, discover 
-                hand-picked roles, and stay ahead of the competition with community-driven insights.
+                Stop searching jobs through thousands of random portals. ApplyTogether brings you the best jobs, recommended by the friends you trust. It's the job search, social media platform.
               </p>
               <div className="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start fade-in" style={{ animationDelay: '0.2s' }}>
                 <Button as={Link} to="/register" variant="primary" className="btn-glow px-5 py-3 fw-bold rounded-3">
                   Start Your Journey
                 </Button>
                 <Button as={Link} to="/login" variant="light" className="px-5 py-3 fw-bold rounded-3 border bg-white shadow-sm">
-                  Member Area
+                  Login
                 </Button>
               </div>
             </Col>
@@ -79,13 +78,13 @@ const Landing = () => {
                       <i className="bi bi-briefcase-fill text-primary h4 mb-0"></i>
                     </div>
                     <div>
-                      <h6 className="fw-bold mb-0">System Architect</h6>
-                      <small className="text-muted">Netflix • Palo Alto</small>
+                      <h6 className="fw-bold mb-0">SDE Intern</h6>
+                      <small className="text-muted">Netflix</small>
                     </div>
                   </div>
                   <div className="d-flex gap-2 mb-4">
-                    <span className="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-2 border border-success border-opacity-10">Remote</span>
-                    <span className="badge bg-warning bg-opacity-10 text-warning rounded-pill px-3 py-2 border border-warning border-opacity-10">2025 Batch</span>
+                    <span className="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-2 border border-success border-opacity-10">Full Time</span>
+                    <span className="badge bg-warning bg-opacity-10 text-warning rounded-pill px-3 py-2 border border-warning border-opacity-10">Batch 2026</span>
                   </div>
                   <div className="p-3 bg-light rounded-3 mb-3 border">
                      <div className="d-flex justify-content-between mb-1">
@@ -96,7 +95,7 @@ const Landing = () => {
                         <div className="progress-bar" style={{ width: '85%' }}></div>
                      </div>
                   </div>
-                  <Button className="w-100 fw-bold py-2 rounded-3 shadow-sm btn-primary" disabled>Mark Applied</Button>
+                  <Button className="w-100 fw-bold py-2 rounded-3 shadow-sm btn-primary" disabled>Apply Now</Button>
                 </div>
                 
                 {/* Floating Elements */}
@@ -122,18 +121,19 @@ const Landing = () => {
           <Row className="g-4 text-center">
             <Col md={4} className="fade-in" style={{ animationDelay: '0.1s' }}>
               <div className="mb-4 display-3 fw-black text-primary opacity-25">01</div>
-              <h4 className="fw-bold mb-3">Create Profile</h4>
-              <p className="text-secondary">Set up your professional identity and link your interests to stay organized.</p>
+              <h4 className="fw-bold mb-3">Create Your Profile</h4>
+              <p className="text-secondary">Register on the platform and connect with your friends.</p>
             </Col>
             <Col md={4} className="fade-in" style={{ animationDelay: '0.2s' }}>
               <div className="mb-4 display-3 fw-black text-primary opacity-25">02</div>
               <h4 className="fw-bold mb-3">Discover Jobs</h4>
-              <p className="text-secondary">Browse high-quality opportunities hand-picked and shared by the community.</p>
+              <p className="text-secondary">Post jobs you’ve applied for and explore jobs shared by your friends.
+You can apply to jobs your friends have applied for—and they can apply to yours too.</p>
             </Col>
             <Col md={4} className="fade-in" style={{ animationDelay: '0.3s' }}>
               <div className="mb-4 display-3 fw-black text-primary opacity-25">03</div>
-              <h4 className="fw-bold mb-3">Apply & Succeed</h4>
-              <p className="text-secondary">Apply via verified links and track every stage of your progress visually.</p>
+              <h4 className="fw-bold mb-3">Track Your Application</h4>
+              <p className="text-secondary">Easily track all the jobs you’ve applied for in one place.</p>
             </Col>
           </Row>
         </Container>
@@ -159,14 +159,14 @@ const Landing = () => {
               <h3 className="fw-black mb-0 tracking-tight">ApplyTogether</h3>
           </div>
           <p className="text-muted mb-4 mx-auto" style={{ maxWidth: '400px' }}>
-            Built for students and professionals to share, track, and succeed together.
+            Built for students and friends to share, track, and succeed together.
           </p>
           <div className="d-flex justify-content-center gap-4 mb-4">
             <a href="#" className="text-muted text-decoration-none small hover-primary">Privacy</a>
             <a href="#" className="text-muted text-decoration-none small hover-primary">Terms</a>
             <a href="#" className="text-muted text-decoration-none small hover-primary">Contact</a>
           </div>
-          <p className="text-muted small mb-0">© 2025 ApplyTogether. Crafted with ❤️ for the community.</p>
+          <p className="text-muted small mb-0">© 2026 ApplyTogether. Crafted with ❤️ for the Friends.</p>
         </Container>
       </footer>
     </div>

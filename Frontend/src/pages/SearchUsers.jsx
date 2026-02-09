@@ -186,17 +186,7 @@ const SearchUsers = () => {
                                             <Card.Body className="p-4 d-flex flex-column">
                                                 {/* Company Logo */}
                                                 <div className="d-flex align-items-center mb-3">
-                                                    <div 
-                                                        className="rounded-circle d-flex justify-content-center align-items-center text-white fw-bold shadow-sm me-3" 
-                                                        style={{ 
-                                                            width: '48px', 
-                                                            height: '48px', 
-                                                            fontSize: '1.2rem',
-                                                            background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
-                                                        }}
-                                                    >
-                                                        {(job.company?.[0] || '?').toUpperCase()}
-                                                    </div>
+
                                                     <div className="flex-grow-1 overflow-hidden">
                                                         <h6 className="fw-bold mb-0 text-truncate">{job.title}</h6>
                                                         <p className="text-primary fw-bold mb-0 small text-truncate">{job.company}</p>
