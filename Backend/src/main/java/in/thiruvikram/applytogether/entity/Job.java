@@ -1,6 +1,8 @@
 package in.thiruvikram.applytogether.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -13,12 +15,16 @@ public class Job {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Job title is required")
     @Column(nullable = false)
     private String title;
 
+    @NotBlank(message = "Company name is required")
     @Column(nullable = false)
     private String company;
 
+    @NotBlank(message = "Job URL is required")
+    @Size(max = 500, message = "URL is too long")
     @Column(nullable = false, length = 500)
     private String jobUrl;
 

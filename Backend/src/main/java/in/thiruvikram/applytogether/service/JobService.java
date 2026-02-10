@@ -3,6 +3,8 @@ package in.thiruvikram.applytogether.service;
 import in.thiruvikram.applytogether.entity.Job;
 import in.thiruvikram.applytogether.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,11 +24,11 @@ public class JobService {
     @Autowired
     private in.thiruvikram.applytogether.repository.NotificationRepository notificationRepository;
 
-    public List<Job> getAllJobs() {
-        return jobRepository.findAllByOrderByPostedDateDesc();
+    public Page<Job> getAllJobs(Pageable pageable) {
+        return jobRepository.findAll(pageable);
     }
 
-    public List<Job> getFeed(String username) {
+    public Page<Job> getFeed(String username, Pageable pageable) {
         in.thiruvikram.applytogether.entity.User currentUser = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -35,19 +37,16 @@ public class JobService {
                 .map(in.thiruvikram.applytogether.entity.Follow::getFollowing)
                 .collect(java.util.stream.Collectors.toList());
 
-        // Also include my own posts? Optional. Let's include them for now so the feed
-        // isn't empty.
+        // Also include my own posts
         following.add(currentUser);
 
-        return jobRepository.findByPostedByInOrderByPostedDateDesc(following);
+        return jobRepository.findByPostedByInOrderByPostedDateDesc(following, pageable);
     }
 
-    public List<Job> getJobsByUser(Long userId) {
+    public Page<Job> getJobsByUser(Long userId, Pageable pageable) {
         in.thiruvikram.applytogether.entity.User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        // Since we don't have a specific method in repo for this yet, let's just make a
-        // list of 1 user
-        return jobRepository.findByPostedByInOrderByPostedDateDesc(java.util.Collections.singletonList(user));
+        return jobRepository.findByPostedByOrderByPostedDateDesc(user, pageable);
     }
 
     public Job getJobById(Long id) {

@@ -102,8 +102,8 @@ const SearchUsers = () => {
     return (
         <Container className="py-5" id="explore-page-root">
             <div className="text-center mb-5">
-                <h1 className="fw-bold mb-3 display-4">Explore</h1>
-                <p className="text-muted fs-5">Discover jobs and connect with people across the platform.</p>
+                <h1 className="fw-bold mb-3 display-5">Explore</h1>
+                <p className="text-muted fs-6">Discover jobs and connect with people across the platform.</p>
                 
                 <div className="mx-auto mt-4" style={{ maxWidth: '600px' }}>
                     <Form onSubmit={handleSearch} className="d-flex gap-2 p-1 bg-white rounded-pill shadow-sm border">

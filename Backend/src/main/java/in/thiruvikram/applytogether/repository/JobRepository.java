@@ -1,6 +1,8 @@
 package in.thiruvikram.applytogether.repository;
 
 import in.thiruvikram.applytogether.entity.Job;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,8 +19,12 @@ public interface JobRepository extends JpaRepository<Job, Long> {
     // Optional: Finder by job type
     List<Job> findByJobType(String jobType);
 
-    // Find jobs posted by a list of users
-    List<Job> findByPostedByInOrderByPostedDateDesc(List<in.thiruvikram.applytogether.entity.User> users);
+    // Find jobs posted by a list of users with pagination
+    Page<Job> findByPostedByInOrderByPostedDateDesc(List<in.thiruvikram.applytogether.entity.User> users,
+            Pageable pageable);
+
+    // Find jobs posted by a specific user with pagination
+    Page<Job> findByPostedByOrderByPostedDateDesc(in.thiruvikram.applytogether.entity.User user, Pageable pageable);
 
     // Admin queries
     List<Job> findByBatchYearContaining(String batchYear);

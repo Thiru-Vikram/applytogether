@@ -2,7 +2,12 @@ package in.thiruvikram.applytogether.controller;
 
 import in.thiruvikram.applytogether.entity.Job;
 import in.thiruvikram.applytogether.service.JobService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,18 +21,23 @@ public class JobController {
     private JobService jobService;
 
     @GetMapping
-    public List<Job> getAllJobs() {
-        return jobService.getAllJobs();
+    public Page<Job> getAllJobs(
+            @PageableDefault(size = 10, sort = "postedDate", direction = Sort.Direction.DESC) Pageable pageable) {
+        return jobService.getAllJobs(pageable);
     }
 
     @GetMapping("/feed")
-    public List<Job> getFeed(java.security.Principal principal) {
-        return jobService.getFeed(principal.getName());
+    public Page<Job> getFeed(
+            java.security.Principal principal,
+            @PageableDefault(size = 10, sort = "postedDate", direction = Sort.Direction.DESC) Pageable pageable) {
+        return jobService.getFeed(principal.getName(), pageable);
     }
 
     @GetMapping("/user/{userId}")
-    public List<Job> getJobsByUser(@PathVariable Long userId) {
-        return jobService.getJobsByUser(userId);
+    public Page<Job> getJobsByUser(
+            @PathVariable Long userId,
+            @PageableDefault(size = 10, sort = "postedDate", direction = Sort.Direction.DESC) Pageable pageable) {
+        return jobService.getJobsByUser(userId, pageable);
     }
 
     @GetMapping("/{id}")
@@ -37,12 +47,12 @@ public class JobController {
 
     // Only Admin can access these (Configured in SecurityConfig)
     @PostMapping
-    public Job createJob(@RequestBody Job job, java.security.Principal principal) {
+    public Job createJob(@Valid @RequestBody Job job, java.security.Principal principal) {
         return jobService.createJob(job, principal.getName());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Job> updateJob(@PathVariable Long id, @RequestBody Job jobDetails) {
+    public ResponseEntity<Job> updateJob(@PathVariable Long id, @Valid @RequestBody Job jobDetails) {
         return ResponseEntity.ok(jobService.updateJob(id, jobDetails));
     }
 

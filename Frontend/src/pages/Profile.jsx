@@ -15,6 +15,7 @@ import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
 import Navbar from "../components/Navbar";
 import NotificationDrawer from "../components/NotificationDrawer";
+import StatCard from "../components/common/StatCard";
 
 const Profile = () => {
   const { userId } = useParams(); // URL usually /u/:userId
@@ -108,7 +109,7 @@ const Profile = () => {
 
       // 2. Get Jobs posted by this user
       const jobsRes = await api.get(`/jobs/user/${targetUserId}`);
-      setJobs(jobsRes.data);
+      setJobs(jobsRes.data.content || []);
 
       // 3. Get Follow Counts
       const followersRes = await api.get(
@@ -302,43 +303,27 @@ const Profile = () => {
   const isMyProfile =
     currentUser && currentUser.userId.toString() === targetUserId.toString();
 
-  const StatCard = ({ title, value, icon, color }) => (
-    <Card className="border-0 shadow-sm h-100 rounded-4 transition hover-shadow">
-      <Card.Body className="p-3">
-        <div className="d-flex align-items-center justify-content-between">
-          <div>
-            <p
-              className="text-secondary small fw-bold mb-1 text-uppercase tracking-wider"
-              style={{ fontSize: "0.65rem" }}
-            >
-              {title}
-            </p>
-            <h4 className="fw-black mb-0">{value}</h4>
-          </div>
-          <div className={`p-2 rounded-3 bg-${color}-light text-${color}`}>
-            <i className={`bi bi-${icon} fs-5`}></i>
-          </div>
-        </div>
-      </Card.Body>
-    </Card>
-  );
 
   return (
     <Container className="py-5">
-      {/* Profile Header */}
-      <div className="mb-4">
+      {/* Profile Header Block */}
+      <div className="text-center mb-5">
+        <h1 className="fw-bold mb-3 display-5">{isMyProfile ? "My Profile" : "User Profile"}</h1>
+        <p className="text-muted fs-6">Manage your professional presence and track your contributions.</p>
+      </div>
+
+      <div className="mb-5">
         <Card className="border-0 shadow-sm rounded-4 overflow-hidden position-relative">
           <Card.Body className="p-4">
-            <div className="d-flex flex-column flex-md-row align-items-center gap-4">
+            <div className="d-flex flex-column flex-md-row align-items-center gap-4 text-center text-md-start">
               {/* Avatar */}
               <div
                 className="rounded-circle d-flex justify-content-center align-items-center text-white fw-bold shadow-sm"
                 style={{
-                  width: "120px",
-                  height: "120px",
+                  width: "110px",
+                  height: "110px",
                   fontSize: "3rem",
-                  background:
-                    "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                  background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
                   zIndex: 2,
                 }}
               >
@@ -347,11 +332,11 @@ const Profile = () => {
                   : profileUser.username.charAt(0).toUpperCase()}
               </div>
 
-              <div className="text-center text-md-start flex-grow-1 pt-2">
-                <h2 className="fw-black mb-1" style={{ color: "#1e293b" }}>
+              <div className="flex-grow-1">
+                <h2 className="fw-black mb-1" style={{ color: "#1e293b", fontSize: "1.75rem" }}>
                   {profileUser.fullName || profileUser.username}
                 </h2>
-                <p className="text-muted mb-3 fw-medium">
+                <p className="text-muted mb-4 fw-medium">
                   @{profileUser.username}
                 </p>
 
@@ -361,26 +346,26 @@ const Profile = () => {
                       variant={isFollowing ? "outline-secondary" : "primary"}
                       onClick={handleFollowToggle}
                       disabled={actionLoading}
-                      className="rounded-pill px-4 fw-bold shadow-sm"
+                      className="rounded-pill px-4 py-2 fw-bold shadow-sm"
                     >
                       {isFollowing ? "Following" : "Follow"}
                     </Button>
                   )}
                   {isMyProfile && (
-                    <div className="d-flex gap-2">
+                    <div className="d-flex gap-3">
                       <Button
                         as={Link}
                         to="/post-job"
                         variant="primary"
-                        className="rounded-pill px-4 fw-bold shadow-sm"
+                        className="rounded-pill px-4 py-2 fw-bold shadow-sm"
                       >
                         <i className="bi bi-plus-lg me-2"></i>Post a Job
                       </Button>
                       <div
                         className="p-2 rounded-circle bg-light shadow-sm d-flex align-items-center justify-content-center cursor-pointer hover-shadow transition"
                         style={{
-                          width: "42px",
-                          height: "42px",
+                          width: "48px",
+                          height: "48px",
                           cursor: "pointer",
                         }}
                         onClick={() => {
@@ -389,7 +374,7 @@ const Profile = () => {
                         }}
                       >
                         <i
-                          className={`bi bi-bell-fill fs-5 ${hasUnread ? "text-danger" : "text-primary"}`}
+                          className={`bi bi-bell-fill fs-4 ${hasUnread ? "text-danger" : "text-primary"}`}
                         ></i>
                       </div>
                     </div>
@@ -397,55 +382,53 @@ const Profile = () => {
                 </div>
               </div>
             </div>
-
-            {/* Stats Row */}
-            <Row className="g-3 mt-2">
-              <Col xs={6} md={isMyProfile ? 3 : 4}>
-                <div onClick={() => {}} style={{ cursor: "default" }}>
-                  <StatCard
-                    title="Posts"
-                    value={jobs.length}
-                    icon="grid"
-                    color="primary"
-                  />
-                </div>
-              </Col>
-              <Col xs={6} md={isMyProfile ? 3 : 4}>
-                <div onClick={openFollowersModal} style={{ cursor: "pointer" }}>
-                  <StatCard
-                    title="Followers"
-                    value={followersCount}
-                    icon="people"
-                    color="success"
-                  />
-                </div>
-              </Col>
-              <Col xs={6} md={isMyProfile ? 3 : 4}>
-                <div onClick={openFollowingModal} style={{ cursor: "pointer" }}>
-                  <StatCard
-                    title="Following"
-                    value={followingCount}
-                    icon="person-plus"
-                    color="info"
-                  />
-                </div>
-              </Col>
-              {isMyProfile && (
-                <Col xs={6} md={3}>
-                  <Link to="/applications" className="text-decoration-none">
-                    <StatCard
-                      title="Applications"
-                      value={applications.length}
-                      icon="file-earmark-text"
-                      color="warning"
-                    />
-                  </Link>
-                </Col>
-              )}
-            </Row>
           </Card.Body>
         </Card>
       </div>
+
+      {/* Stats Row */}
+      <Row className="g-4 mb-5">
+        <Col xs={12} sm={6} md={isMyProfile ? 3 : 4}>
+          <StatCard
+            title="Posts"
+            value={jobs.length}
+            icon="grid"
+            color="primary"
+          />
+        </Col>
+        <Col xs={12} sm={6} md={isMyProfile ? 3 : 4}>
+          <div onClick={openFollowersModal} style={{ cursor: "pointer" }} className="h-100">
+            <StatCard
+              title="Followers"
+              value={followersCount}
+              icon="people"
+              color="success"
+            />
+          </div>
+        </Col>
+        <Col xs={12} sm={6} md={isMyProfile ? 3 : 4}>
+          <div onClick={openFollowingModal} style={{ cursor: "pointer" }} className="h-100">
+            <StatCard
+              title="Following"
+              value={followingCount}
+              icon="person-plus"
+              color="info"
+            />
+          </div>
+        </Col>
+        {isMyProfile && (
+          <Col xs={12} sm={6} md={3}>
+            <Link to="/applications" className="text-decoration-none h-100 d-block">
+              <StatCard
+                title="Applications"
+                value={applications.length}
+                icon="file-earmark-text"
+                color="warning"
+              />
+            </Link>
+          </Col>
+        )}
+      </Row>
 
       <hr className="my-5" />
 

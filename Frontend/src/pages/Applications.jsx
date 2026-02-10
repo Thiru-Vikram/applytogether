@@ -62,43 +62,42 @@ const Applications = () => {
     rejected: applications.filter(a => a.status === 'REJECTED').length
   };
 
+  const StatCard = ({ title, value, icon, color }) => (
+    <Card className="border-0 shadow-sm h-100 rounded-4 transition hover-shadow">
+      <Card.Body className="p-4">
+        <div className="d-flex align-items-center justify-content-between">
+          <div>
+            <p className="text-secondary small fw-bold mb-1 text-uppercase tracking-wider">{title}</p>
+            <h2 className="fw-black mb-0">{value}</h2>
+          </div>
+          <div className={`p-3 rounded-4 bg-${color}-light text-${color}`}>
+            <i className={`bi bi-${icon} fs-3`}></i>
+          </div>
+        </div>
+      </Card.Body>
+    </Card>
+  );
+
   return (
-    <Container className="fade-in py-5">
-      <h1 className="display-6 fw-bold mb-4">Application Tracker</h1>
+    <Container className="py-5">
+      <div className="text-center mb-5">
+        <h1 className="fw-bold mb-3 display-5">Application Tracker</h1>
+        <p className="text-muted fs-6">Monitor your journey and stay on top of your job search.</p>
+      </div>
 
       {/* Stats Cards */}
       <Row className="g-4 mb-5">
         <Col lg={3} md={6}>
-          <Card className="border-0 shadow-sm rounded-4 bg-primary text-white p-3 h-100 transition hover-shadow">
-            <Card.Body>
-              <h6 className="text-uppercase small fw-bold opacity-75">Total Applications</h6>
-              <h2 className="display-5 fw-bold mb-0">{stats.total}</h2>
-            </Card.Body>
-          </Card>
+          <StatCard title="Total Applications" value={stats.total} icon="briefcase" color="primary" />
         </Col>
         <Col lg={3} md={6}>
-          <Card className="border-0 shadow-sm rounded-4 bg-white p-3 border-start border-warning border-5 h-100 transition hover-shadow">
-            <Card.Body>
-              <h6 className="text-uppercase small fw-bold text-secondary">Interviewing</h6>
-              <h2 className="display-5 fw-bold mb-0">{stats.interviewing}</h2>
-            </Card.Body>
-          </Card>
+          <StatCard title="Interviewing" value={stats.interviewing} icon="people" color="warning" />
         </Col>
         <Col lg={3} md={6}>
-          <Card className="border-0 shadow-sm rounded-4 bg-white p-3 border-start border-success border-5 h-100 transition hover-shadow">
-            <Card.Body>
-              <h6 className="text-uppercase small fw-bold text-secondary">Offers Received</h6>
-              <h2 className="display-5 fw-bold mb-0">{stats.offers}</h2>
-            </Card.Body>
-          </Card>
+          <StatCard title="Offers Received" value={stats.offers} icon="check-circle" color="success" />
         </Col>
         <Col lg={3} md={6}>
-          <Card className="border-0 shadow-sm rounded-4 bg-white p-3 border-start border-danger border-5 h-100 transition hover-shadow">
-            <Card.Body>
-              <h6 className="text-uppercase small fw-bold text-secondary">Rejected</h6>
-              <h2 className="display-5 fw-bold mb-0">{stats.rejected}</h2>
-            </Card.Body>
-          </Card>
+          <StatCard title="Rejected" value={stats.rejected} icon="x-circle" color="danger" />
         </Col>
       </Row>
 
