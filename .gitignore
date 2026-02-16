@@ -1,0 +1,37 @@
+# Project-wide ignore rules
+.DS_Store
+Thumbs.db
+*.bak
+*.tmp
+*.log
+
+# IDE & Editor folders
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+
+# Root build artifacts
+/build/
+/target/
+/node_modules/
+
+# --- Backend Ignores ---
+Backend/target/
+Backend/.apt_generated
+Backend/.classpath
+Backend/.factorypath
+Backend/.project
+Backend/.settings
+Backend/.springBeans
+Backend/.sts4-cache
+
+# --- Frontend Ignores ---
+Frontend/node_modules/
+Frontend/dist/
+Frontend/dist-ssr/
+Frontend/*.local
+Frontend/.env
+Frontend/.env.*
+!Frontend/.env.example
