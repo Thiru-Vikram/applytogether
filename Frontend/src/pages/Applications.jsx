@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Card, Badge, Button, Spinner, Alert, Table, Form } from 'react-bootstrap';
 import api from '../api/axios';
+import StatCard from '../components/common/StatCard';
 
 const Applications = () => {
   const [applications, setApplications] = useState([]);
@@ -62,21 +63,6 @@ const Applications = () => {
     rejected: applications.filter(a => a.status === 'REJECTED').length
   };
 
-  const StatCard = ({ title, value, icon, color }) => (
-    <Card className="border-0 shadow-sm h-100 rounded-4 transition hover-shadow">
-      <Card.Body className="p-4">
-        <div className="d-flex align-items-center justify-content-between">
-          <div>
-            <p className="text-secondary small fw-bold mb-1 text-uppercase tracking-wider">{title}</p>
-            <h2 className="fw-black mb-0">{value}</h2>
-          </div>
-          <div className={`p-3 rounded-4 bg-${color}-light text-${color}`}>
-            <i className={`bi bi-${icon} fs-3`}></i>
-          </div>
-        </div>
-      </Card.Body>
-    </Card>
-  );
 
   return (
     <Container className="py-5">

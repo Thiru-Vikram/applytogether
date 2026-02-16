@@ -6,6 +6,7 @@ import {
     LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area,
     BarChart, Bar, Cell, PieChart, Pie
 } from 'recharts';
+import StatCard from '../components/common/StatCard';
 
 const AdminDashboard = () => {
     const [stats, setStats] = useState(null);
@@ -38,21 +39,6 @@ const AdminDashboard = () => {
         );
     }
 
-    const StatCard = ({ title, value, icon, color }) => (
-        <Card className="border-0 shadow-sm h-100 rounded-4 transition hover-shadow">
-            <Card.Body className="p-4">
-                <div className="d-flex align-items-center justify-content-between">
-                    <div>
-                        <p className="text-secondary small fw-bold mb-1 text-uppercase tracking-wider">{title}</p>
-                        <h2 className="fw-black mb-0">{value}</h2>
-                    </div>
-                    <div className={`p-3 rounded-4 bg-${color}-light text-${color}`}>
-                        <i className={`bi bi-${icon} fs-3`}></i>
-                    </div>
-                </div>
-            </Card.Body>
-        </Card>
-    );
 
     return (
         <Container className="py-5">

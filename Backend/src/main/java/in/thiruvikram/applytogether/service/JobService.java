@@ -1,13 +1,19 @@
 package in.thiruvikram.applytogether.service;
 
-import in.thiruvikram.applytogether.entity.Job;
+import in.thiruvikram.applytogether.entity.Follow;
+import in.thiruvikram.applytogether.entity.Notification;
+import in.thiruvikram.applytogether.entity.User;
+import in.thiruvikram.applytogether.repository.FollowRepository;
 import in.thiruvikram.applytogether.repository.JobRepository;
+import in.thiruvikram.applytogether.repository.NotificationRepository;
+import in.thiruvikram.applytogether.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class JobService {
@@ -16,26 +22,26 @@ public class JobService {
     private JobRepository jobRepository;
 
     @Autowired
-    private in.thiruvikram.applytogether.repository.UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    private in.thiruvikram.applytogether.repository.FollowRepository followRepository;
+    private FollowRepository followRepository;
 
     @Autowired
-    private in.thiruvikram.applytogether.repository.NotificationRepository notificationRepository;
+    private NotificationRepository notificationRepository;
 
     public Page<Job> getAllJobs(Pageable pageable) {
         return jobRepository.findAll(pageable);
     }
 
     public Page<Job> getFeed(String username, Pageable pageable) {
-        in.thiruvikram.applytogether.entity.User currentUser = userRepository.findByUsername(username)
+        User currentUser = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        List<in.thiruvikram.applytogether.entity.User> following = followRepository.findByFollower(currentUser).stream()
+        List<User> following = followRepository.findByFollower(currentUser).stream()
                 .filter(f -> "ACCEPTED".equals(f.getStatus()))
-                .map(in.thiruvikram.applytogether.entity.Follow::getFollowing)
-                .collect(java.util.stream.Collectors.toList());
+                .map(Follow::getFollowing)
+                .collect(Collectors.toList());
 
         // Also include my own posts
         following.add(currentUser);
@@ -44,7 +50,7 @@ public class JobService {
     }
 
     public Page<Job> getJobsByUser(Long userId, Pageable pageable) {
-        in.thiruvikram.applytogether.entity.User user = userRepository.findById(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         return jobRepository.findByPostedByOrderByPostedDateDesc(user, pageable);
     }
@@ -54,19 +60,19 @@ public class JobService {
     }
 
     public Job createJob(Job job, String username) {
-        in.thiruvikram.applytogether.entity.User user = userRepository.findByUsername(username)
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         job.setPostedBy(user);
         Job savedJob = jobRepository.save(job);
 
         // Notify followers
-        List<in.thiruvikram.applytogether.entity.User> followers = followRepository.findByFollowing(user).stream()
+        List<User> followers = followRepository.findByFollowing(user).stream()
                 .filter(f -> "ACCEPTED".equals(f.getStatus()))
-                .map(in.thiruvikram.applytogether.entity.Follow::getFollower)
-                .collect(java.util.stream.Collectors.toList());
+                .map(Follow::getFollower)
+                .collect(Collectors.toList());
 
-        for (in.thiruvikram.applytogether.entity.User follower : followers) {
-            in.thiruvikram.applytogether.entity.Notification notification = new in.thiruvikram.applytogether.entity.Notification(
+        for (User follower : followers) {
+            Notification notification = new Notification(
                     follower,
                     user,
                     "JOB_POST",
