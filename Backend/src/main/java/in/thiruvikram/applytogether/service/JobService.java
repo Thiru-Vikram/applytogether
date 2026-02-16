@@ -1,6 +1,7 @@
 package in.thiruvikram.applytogether.service;
 
 import in.thiruvikram.applytogether.entity.Follow;
+import in.thiruvikram.applytogether.entity.Job;
 import in.thiruvikram.applytogether.entity.Notification;
 import in.thiruvikram.applytogether.entity.User;
 import in.thiruvikram.applytogether.repository.FollowRepository;
