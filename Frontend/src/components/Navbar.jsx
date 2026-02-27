@@ -94,16 +94,26 @@ const Navbar = () => {
                     <NavItem to="/admin/users" label="Users" adminOnly={true} />
                     <NavItem to="/admin/jobs" label="Jobs" adminOnly={true} />
                     <NavItem
+                      to="/admin/reports"
+                      label="Reports"
+                      adminOnly={true}
+                    />
+                    <NavItem
                       to="/add-admin"
                       label="Add Admin"
                       adminOnly={true}
                     />
+                  </>
+                ) : user.role === "STAFF" ? (
+                  <>
+                    <NavItem to="/staff/tasks" label="My Tasks" />
                   </>
                 ) : (
                   <>
                     <NavItem to="/jobs" label="Home" />
                     <NavItem to="/search" label="Explore" />
                     <NavItem to="/applications" label="Applications" />
+                    <NavItem to="/my-reports" label="My Reports" />
                     <NavItem to={`/u/${user.userId}`} label="My Profile" />
                   </>
                 )}
@@ -135,7 +145,6 @@ const Navbar = () => {
               </>
             ) : (
               <>
-
                 {/* Get Started Button */}
                 <Button
                   variant="primary"

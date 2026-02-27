@@ -23,7 +23,8 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    // Role will be processed as a String for simplicity: "ADMIN" or "USER"
+    // Role will be processed as a String for simplicity: "ADMIN", "USER", or
+    // "STAFF"
     @Column(nullable = false)
     private String role;
 

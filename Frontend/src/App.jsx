@@ -21,6 +21,9 @@ import SearchUsers from "./pages/SearchUsers";
 import AdminDashboard from "./pages/AdminDashboard";
 import UserManagement from "./pages/UserManagement";
 import JobModeration from "./pages/JobModeration";
+import AdminReports from "./pages/AdminReports";
+import StaffPanel from "./pages/StaffPanel";
+import MyReports from "./pages/MyReports";
 
 function AppContent() {
   const location = useLocation();
@@ -91,6 +94,38 @@ function AppContent() {
               element={
                 <ProtectedRoute adminOnly={true}>
                   <JobModeration />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/reports"
+              element={
+                <ProtectedRoute adminOnly={true}>
+                  <AdminReports />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/staff/reports"
+              element={
+                <ProtectedRoute staffOnly={true}>
+                  <StaffPanel />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/staff/tasks"
+              element={
+                <ProtectedRoute staffOnly={true}>
+                  <StaffPanel />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/my-reports"
+              element={
+                <ProtectedRoute>
+                  <MyReports />
                 </ProtectedRoute>
               }
             />
