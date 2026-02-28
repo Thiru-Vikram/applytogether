@@ -2,8 +2,8 @@ package in.thiruvikram.applytogether.controller;
 
 import in.thiruvikram.applytogether.entity.User;
 import in.thiruvikram.applytogether.service.FollowService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -13,16 +13,21 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class FollowController {
 
-    @Autowired
-    private FollowService followService;
+    private final FollowService followService;
+
+    public FollowController(FollowService followService) {
+        this.followService = followService;
+    }
 
     @PostMapping("/{userId}/follow")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<String> followUser(@PathVariable Long userId, Principal principal) {
         followService.followUser(principal.getName(), userId);
         return ResponseEntity.ok("Followed successfully");
     }
 
     @PostMapping("/{userId}/unfollow")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<String> unfollowUser(@PathVariable Long userId, Principal principal) {
         followService.unfollowUser(principal.getName(), userId);
         return ResponseEntity.ok("Unfollowed successfully");
@@ -49,17 +54,20 @@ public class FollowController {
     }
 
     @GetMapping("/{userId}/is-following")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Boolean> isFollowing(@PathVariable Long userId, Principal principal) {
         return ResponseEntity.ok(followService.isFollowing(principal.getName(), userId));
     }
 
     @PostMapping("/followers/{followerId}/accept")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<String> acceptFollowRequest(@PathVariable Long followerId, Principal principal) {
         followService.acceptFollowRequest(principal.getName(), followerId);
         return ResponseEntity.ok("Follow request accepted");
     }
 
     @PostMapping("/followers/{followerId}/reject")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<String> rejectFollowRequest(@PathVariable Long followerId, Principal principal) {
         followService.deleteFollowRequest(principal.getName(), followerId);
         return ResponseEntity.ok("Follow request rejected");

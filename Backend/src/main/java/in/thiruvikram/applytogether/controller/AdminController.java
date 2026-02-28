@@ -1,9 +1,9 @@
 package in.thiruvikram.applytogether.controller;
 
 import in.thiruvikram.applytogether.dto.AdminStatsResponse;
+import in.thiruvikram.applytogether.entity.Job;
 import in.thiruvikram.applytogether.entity.User;
 import in.thiruvikram.applytogether.service.AdminService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -15,8 +15,11 @@ import java.util.Map;
 @RequestMapping("/api/admin")
 public class AdminController {
 
-    @Autowired
-    private AdminService adminService;
+    private final AdminService adminService;
+
+    public AdminController(AdminService adminService) {
+        this.adminService = adminService;
+    }
 
     // Get admin dashboard statistics
     @GetMapping("/stats")
@@ -57,7 +60,7 @@ public class AdminController {
     // Get all jobs (for job moderation)
     @GetMapping("/jobs")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> getAllJobs(
+    public ResponseEntity<List<Job>> getAllJobs(
             @RequestParam(required = false) String batchYear,
             @RequestParam(required = false) String jobType) {
         return ResponseEntity.ok(adminService.getAllJobs(batchYear, jobType));
@@ -74,7 +77,7 @@ public class AdminController {
     // Get recent activity
     @GetMapping("/activity")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> getRecentActivity(@RequestParam(defaultValue = "20") int limit) {
+    public ResponseEntity<List<Map<String, Object>>> getRecentActivity(@RequestParam(defaultValue = "20") int limit) {
         return ResponseEntity.ok(adminService.getRecentActivity(limit));
     }
 }

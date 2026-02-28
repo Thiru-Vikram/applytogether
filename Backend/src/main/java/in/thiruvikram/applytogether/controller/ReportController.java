@@ -8,8 +8,8 @@ import in.thiruvikram.applytogether.entity.Report;
 import in.thiruvikram.applytogether.entity.User;
 import in.thiruvikram.applytogether.service.AuthService;
 import in.thiruvikram.applytogether.service.ReportService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -19,16 +19,19 @@ import java.util.List;
 @RequestMapping("/api/reports")
 public class ReportController {
 
-    @Autowired
-    private ReportService reportService;
+    private final ReportService reportService;
+    private final AuthService authService;
 
-    @Autowired
-    private AuthService authService;
+    public ReportController(ReportService reportService, AuthService authService) {
+        this.reportService = reportService;
+        this.authService = authService;
+    }
 
     /**
      * Submit a new report (USER)
      */
     @PostMapping("/submit")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Report> submitReport(@RequestBody ReportSubmitRequest request, Principal principal) {
         User user = authService.getUserByUsername(principal.getName());
         Report report = reportService.submitReport(
@@ -44,11 +47,8 @@ public class ReportController {
      * Get all reports (ADMIN)
      */
     @GetMapping("/all")
-    public ResponseEntity<List<Report>> getAllReports(Principal principal) {
-        User user = authService.getUserByUsername(principal.getName());
-        if (!"ADMIN".equals(user.getRole())) {
-            return ResponseEntity.status(403).build();
-        }
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<Report>> getAllReports() {
         return ResponseEntity.ok(reportService.getAllReports());
     }
 
@@ -56,6 +56,7 @@ public class ReportController {
      * Get my submitted reports (USER)
      */
     @GetMapping("/my-reports")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<Report>> getMyReports(Principal principal) {
         User user = authService.getUserByUsername(principal.getName());
         return ResponseEntity.ok(reportService.getMyReports(user));
@@ -65,6 +66,7 @@ public class ReportController {
      * Get reports assigned to me (STAFF)
      */
     @GetMapping("/assigned")
+    @PreAuthorize("hasRole('STAFF') or hasRole('ADMIN')")
     public ResponseEntity<List<Report>> getAssignedReports(Principal principal) {
         User user = authService.getUserByUsername(principal.getName());
         return ResponseEntity.ok(reportService.getMyAssignedReports(user));
@@ -74,11 +76,8 @@ public class ReportController {
      * Get all staff members (ADMIN)
      */
     @GetMapping("/staff")
-    public ResponseEntity<List<User>> getAllStaff(Principal principal) {
-        User user = authService.getUserByUsername(principal.getName());
-        if (!"ADMIN".equals(user.getRole())) {
-            return ResponseEntity.status(403).build();
-        }
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<User>> getAllStaff() {
         return ResponseEntity.ok(reportService.getAllStaffUsers());
     }
 
@@ -86,6 +85,7 @@ public class ReportController {
      * Assign report to staff (ADMIN)
      */
     @PatchMapping("/{reportId}/assign")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Report> assignToStaff(
             @PathVariable Long reportId,
             @RequestBody AssignStaffRequest request,
@@ -99,6 +99,7 @@ public class ReportController {
      * Resolve report with proof (STAFF)
      */
     @PatchMapping("/{reportId}/resolve")
+    @PreAuthorize("hasRole('STAFF') or hasRole('ADMIN')")
     public ResponseEntity<Report> resolveReport(
             @PathVariable Long reportId,
             @RequestBody ResolveReportRequest request,
@@ -117,6 +118,7 @@ public class ReportController {
      * Verify and close report (USER)
      */
     @PatchMapping("/{reportId}/verify")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Report> verifyReport(
             @PathVariable Long reportId,
             @RequestBody VerifyReportRequest request,

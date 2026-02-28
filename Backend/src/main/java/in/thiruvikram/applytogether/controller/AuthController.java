@@ -4,7 +4,6 @@ import in.thiruvikram.applytogether.dto.AuthResponse;
 import in.thiruvikram.applytogether.dto.LoginRequest;
 import in.thiruvikram.applytogether.dto.RegisterRequest;
 import in.thiruvikram.applytogether.service.AuthService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,8 +11,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    @Autowired
-    private AuthService authService;
+    private final AuthService authService;
+
+    public AuthController(AuthService authService) {
+        this.authService = authService;
+    }
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {

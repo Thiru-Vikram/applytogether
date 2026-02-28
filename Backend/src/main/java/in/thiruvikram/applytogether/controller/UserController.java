@@ -2,16 +2,21 @@ package in.thiruvikram.applytogether.controller;
 
 import in.thiruvikram.applytogether.entity.User;
 import in.thiruvikram.applytogether.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
@@ -28,8 +33,9 @@ public class UserController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<java.util.List<User>> searchUsers(@RequestParam String query) {
-        java.util.List<User> users = userRepository
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<List<User>> searchUsers(@RequestParam String query) {
+        List<User> users = userRepository
                 .findByUsernameContainingIgnoreCaseOrFullNameContainingIgnoreCase(
                         query, query);
         return ResponseEntity.ok(users);
