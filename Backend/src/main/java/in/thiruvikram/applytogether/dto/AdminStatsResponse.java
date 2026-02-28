@@ -1,5 +1,8 @@
 package in.thiruvikram.applytogether.dto;
 
+import java.util.List;
+import java.util.Map;
+
 public class AdminStatsResponse {
     private long totalUsers;
     private long totalJobs;
@@ -7,15 +10,15 @@ public class AdminStatsResponse {
     private long newUsersThisWeek;
     private long newUsersThisMonth;
     private String mostActiveBatch;
-    private java.util.List<java.util.Map<String, Object>> userGrowth;
-    private java.util.List<java.util.Map<String, Object>> batchDistribution;
+    private List<Map<String, Object>> userGrowth;
+    private List<Map<String, Object>> batchDistribution;
 
     public AdminStatsResponse() {
     }
 
     public AdminStatsResponse(long totalUsers, long totalJobs, long totalApplications, long newUsersThisWeek,
-            long newUsersThisMonth, String mostActiveBatch, java.util.List<java.util.Map<String, Object>> userGrowth,
-            java.util.List<java.util.Map<String, Object>> batchDistribution) {
+            long newUsersThisMonth, String mostActiveBatch, List<Map<String, Object>> userGrowth,
+            List<Map<String, Object>> batchDistribution) {
         this.totalUsers = totalUsers;
         this.totalJobs = totalJobs;
         this.totalApplications = totalApplications;
@@ -74,19 +77,19 @@ public class AdminStatsResponse {
         this.mostActiveBatch = mostActiveBatch;
     }
 
-    public java.util.List<java.util.Map<String, Object>> getUserGrowth() {
+    public List<Map<String, Object>> getUserGrowth() {
         return userGrowth;
     }
 
-    public void setUserGrowth(java.util.List<java.util.Map<String, Object>> userGrowth) {
+    public void setUserGrowth(List<Map<String, Object>> userGrowth) {
         this.userGrowth = userGrowth;
     }
 
-    public java.util.List<java.util.Map<String, Object>> getBatchDistribution() {
+    public List<Map<String, Object>> getBatchDistribution() {
         return batchDistribution;
     }
 
-    public void setBatchDistribution(java.util.List<java.util.Map<String, Object>> batchDistribution) {
+    public void setBatchDistribution(List<Map<String, Object>> batchDistribution) {
         this.batchDistribution = batchDistribution;
     }
 }

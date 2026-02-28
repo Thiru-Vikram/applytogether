@@ -21,7 +21,6 @@ public class RegisterRequest {
         this.fullName = fullName;
         this.gender = gender;
         this.passingYear = passingYear;
-        this.passingYear = passingYear;
     }
 
     public String getUsername() {
