@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  useLocation,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import Navbar from "./components/Navbar";
@@ -23,19 +18,13 @@ import UserManagement from "./pages/UserManagement";
 import JobModeration from "./pages/JobModeration";
 import AdminReports from "./pages/AdminReports";
 import StaffPanel from "./pages/StaffPanel";
-import MyReports from "./pages/MyReports";
 
 function AppContent() {
-  const location = useLocation();
-  // Define paths where the ad sidebar should be hidden
-  const hideAdPaths = ["/", "/login", "/register"];
-  const showAds = !hideAdPaths.includes(location.pathname);
-
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
 
-      <div className={`app-layout ${!showAds ? "no-ads" : ""}`}>
+      <div className="app-layout">
         <main className="main-content">
           <Routes>
             <Route path="/" element={<Landing />} />
@@ -122,15 +111,6 @@ function AppContent() {
               }
             />
             <Route
-              path="/my-reports"
-              element={
-                <ProtectedRoute>
-                  <MyReports />
-                </ProtectedRoute>
-              }
-            />
-
-            <Route
               path="/u/:userId"
               element={
                 <ProtectedRoute>
@@ -148,14 +128,6 @@ function AppContent() {
             />
           </Routes>
         </main>
-
-        {showAds && (
-          <aside className="ad-sidebar ad-sidebar-right">
-            <div className="ad-placeholder">
-              <span>Ad Space</span>
-            </div>
-          </aside>
-        )}
       </div>
     </div>
   );

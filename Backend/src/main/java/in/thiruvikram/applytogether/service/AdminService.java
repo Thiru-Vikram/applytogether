@@ -6,7 +6,6 @@ import in.thiruvikram.applytogether.entity.User;
 import in.thiruvikram.applytogether.repository.ApplicationRepository;
 import in.thiruvikram.applytogether.repository.JobRepository;
 import in.thiruvikram.applytogether.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,14 +16,16 @@ import java.util.stream.Collectors;
 @Service
 public class AdminService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final JobRepository jobRepository;
+    private final ApplicationRepository applicationRepository;
 
-    @Autowired
-    private JobRepository jobRepository;
-
-    @Autowired
-    private ApplicationRepository applicationRepository;
+    public AdminService(UserRepository userRepository, JobRepository jobRepository,
+            ApplicationRepository applicationRepository) {
+        this.userRepository = userRepository;
+        this.jobRepository = jobRepository;
+        this.applicationRepository = applicationRepository;
+    }
 
     public AdminStatsResponse getAdminStats() {
         long totalUsers = userRepository.count();

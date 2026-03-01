@@ -2,9 +2,10 @@ package in.thiruvikram.applytogether.service;
 
 import in.thiruvikram.applytogether.entity.Follow;
 import in.thiruvikram.applytogether.entity.User;
+import in.thiruvikram.applytogether.entity.Notification;
 import in.thiruvikram.applytogether.repository.FollowRepository;
+import in.thiruvikram.applytogether.repository.NotificationRepository;
 import in.thiruvikram.applytogether.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,14 +14,16 @@ import java.util.stream.Collectors;
 @Service
 public class FollowService {
 
-        @Autowired
-        private FollowRepository followRepository;
+        private final FollowRepository followRepository;
+        private final UserRepository userRepository;
+        private final NotificationRepository notificationRepository;
 
-        @Autowired
-        private UserRepository userRepository;
-
-        @Autowired
-        private in.thiruvikram.applytogether.repository.NotificationRepository notificationRepository;
+        public FollowService(FollowRepository followRepository, UserRepository userRepository,
+                        NotificationRepository notificationRepository) {
+                this.followRepository = followRepository;
+                this.userRepository = userRepository;
+                this.notificationRepository = notificationRepository;
+        }
 
         public void followUser(String followerUsername, Long followingId) {
                 User follower = userRepository.findByUsername(followerUsername)
@@ -40,7 +43,7 @@ public class FollowService {
                 followRepository.save(follow);
 
                 // Create Notification
-                in.thiruvikram.applytogether.entity.Notification notification = new in.thiruvikram.applytogether.entity.Notification(
+                Notification notification = new Notification(
                                 following,
                                 follower,
                                 "FOLLOW_REQUEST",
@@ -70,7 +73,7 @@ public class FollowService {
                 followRepository.save(reverseFollow);
 
                 // Notify the follower that request was accepted
-                in.thiruvikram.applytogether.entity.Notification notification = new in.thiruvikram.applytogether.entity.Notification(
+                Notification notification = new Notification(
                                 follower,
                                 currentUser,
                                 "FOLLOW_ACCEPTED",

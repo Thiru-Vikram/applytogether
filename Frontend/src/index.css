@@ -26,19 +26,18 @@ body {
 
 /* Skeleton Loading Animation */
 .skeleton-loading {
-  background: linear-gradient(
-    90deg,
-    #f0f2f5 25%,
-    #e2e8f0 50%,
-    #f0f2f5 75%
-  );
+  background: linear-gradient(90deg, #f0f2f5 25%, #e2e8f0 50%, #f0f2f5 75%);
   background-size: 200% 100%;
   animation: skeleton-shimmer 1.5s infinite linear;
 }
 
 @keyframes skeleton-shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 /* Background Blobs */
@@ -528,59 +527,16 @@ button {
   background: #94a3b8;
 }
 
-/* Layout Refactor - High Performance Monetization */
+/* Layout: full-width content without ads */
 .app-layout {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
-  padding: 1.5rem;
   width: 100%;
   max-width: 100%;
-}
-
-@media (min-width: 1024px) {
-  .app-layout {
-    grid-template-columns: 1fr 300px; /* Main content and ad sidebar */
-    width: 100%;
-    max-width: 1600px; /* Limit max width for very large screens */
-    margin: 0 auto; /* Center the layout */
-    padding: 1.5rem 2rem; /* Adjust padding for larger screens */
-  }
-
-  .app-layout.no-ads {
-    grid-template-columns: 1fr;
-    display: block; /* Fallback to block to ensure full width */
-  }
+  padding: 0;
+  margin: 0;
 }
 
 .main-content {
   width: 100%;
-}
-
-.ad-sidebar {
-  display: none; /* Hidden on smaller screens */
-}
-
-@media (min-width: 1024px) {
-  .ad-sidebar {
-    display: block;
-    position: sticky;
-    top: 120px; /* Adjust based on navbar height */
-    height: calc(100vh - 140px);
-  }
-}
-
-.ad-space {
-  width: 100%;
-  height: 300px;
-  background-color: var(--surface);
-  border: 1px dashed var(--border);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-secondary);
-  font-weight: bold;
 }
 
 /* Glassmorphism Sidebar */
@@ -674,11 +630,21 @@ button {
 }
 
 /* Color utilities for badges and stat cards */
-.bg-primary-light { background-color: var(--primary-light) !important; }
-.bg-success-light { background-color: var(--success-light) !important; }
-.bg-danger-light { background-color: var(--danger-light) !important; }
-.bg-warning-light { background-color: var(--warning-light) !important; }
-.bg-info-light { background-color: var(--info-light) !important; }
+.bg-primary-light {
+  background-color: var(--primary-light) !important;
+}
+.bg-success-light {
+  background-color: var(--success-light) !important;
+}
+.bg-danger-light {
+  background-color: var(--danger-light) !important;
+}
+.bg-warning-light {
+  background-color: var(--warning-light) !important;
+}
+.bg-info-light {
+  background-color: var(--info-light) !important;
+}
 
 .text-primary {
   color: var(--primary) !important;

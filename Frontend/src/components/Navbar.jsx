@@ -72,9 +72,7 @@ const Navbar = () => {
       <Container>
         <BootstrapNavbar.Brand
           as={Link}
-          to={
-            !user ? "/" : user.role === "ADMIN" ? "/admin/dashboard" : "/jobs"
-          }
+          to="/"
           className="fw-bold fs-3 text-primary transition-transform hover-scale"
         >
           ApplyTogether
@@ -113,7 +111,6 @@ const Navbar = () => {
                     <NavItem to="/jobs" label="Home" />
                     <NavItem to="/search" label="Explore" />
                     <NavItem to="/applications" label="Applications" />
-                    <NavItem to="/my-reports" label="My Reports" />
                     <NavItem to={`/u/${user.userId}`} label="My Profile" />
                   </>
                 )}

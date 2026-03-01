@@ -4,9 +4,7 @@ import in.thiruvikram.applytogether.entity.Application;
 import in.thiruvikram.applytogether.entity.Job;
 import in.thiruvikram.applytogether.entity.User;
 import in.thiruvikram.applytogether.repository.ApplicationRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import in.thiruvikram.applytogether.service.AuthService;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,14 +12,16 @@ import java.util.Optional;
 @Service
 public class ApplicationService {
 
-    @Autowired
-    private ApplicationRepository applicationRepository;
+    private final ApplicationRepository applicationRepository;
+    private final JobService jobService;
+    private final AuthService authService;
 
-    @Autowired
-    private JobService jobService;
-
-    @Autowired
-    private AuthService authService;
+    public ApplicationService(ApplicationRepository applicationRepository, JobService jobService,
+            AuthService authService) {
+        this.applicationRepository = applicationRepository;
+        this.jobService = jobService;
+        this.authService = authService;
+    }
 
     public Application applyToJob(User user, Long jobId) {
         Optional<Application> existing = applicationRepository.findByUserAndJobId(user, jobId);
@@ -48,12 +48,14 @@ public class ApplicationService {
 
         User currentUser = authService.getUserByUsername(username);
 
-        // Authorization: Only Admin or the person who posted the job can update status
+        // Authorization: Admins, job posters, or the applicant can update status
         boolean isAdmin = currentUser.getRole().equals("ADMIN");
         boolean isJobPoster = application.getJob().getPostedBy() != null &&
                 application.getJob().getPostedBy().getUsername().equals(username);
+        boolean isApplicant = application.getUser() != null &&
+                application.getUser().getUsername().equals(username);
 
-        if (!isAdmin && !isJobPoster) {
+        if (!isAdmin && !isJobPoster && !isApplicant) {
             throw new RuntimeException("Unauthorized to update application status");
         }
 

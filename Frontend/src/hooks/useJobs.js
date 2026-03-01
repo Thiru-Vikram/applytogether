@@ -14,11 +14,17 @@ export const useJobs = (type = 'feed', params = {}) => {
         refetch,
         isFetching
     } = useQuery({
-        queryKey: ['jobs', type, params],
+        queryKey: ['jobs', type, JSON.stringify(params)],
+        enabled: type !== 'user' || Boolean(params.userId),
         queryFn: async () => {
             let endpoint = '/jobs';
             if (type === 'feed') endpoint = '/jobs/feed';
-            else if (type === 'user') endpoint = `/jobs/user/${params.userId}`;
+            else if (type === 'user') {
+                if (!params.userId) {
+                    throw new Error('userId is required when fetching user jobs');
+                }
+                endpoint = `/jobs/user/${params.userId}`;
+            }
 
             const response = await api.get(endpoint, { params });
             return response.data;

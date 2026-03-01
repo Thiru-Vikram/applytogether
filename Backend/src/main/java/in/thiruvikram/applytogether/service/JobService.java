@@ -8,7 +8,6 @@ import in.thiruvikram.applytogether.repository.FollowRepository;
 import in.thiruvikram.applytogether.repository.JobRepository;
 import in.thiruvikram.applytogether.repository.NotificationRepository;
 import in.thiruvikram.applytogether.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,17 +18,18 @@ import java.util.stream.Collectors;
 @Service
 public class JobService {
 
-    @Autowired
-    private JobRepository jobRepository;
+    private final JobRepository jobRepository;
+    private final UserRepository userRepository;
+    private final FollowRepository followRepository;
+    private final NotificationRepository notificationRepository;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private FollowRepository followRepository;
-
-    @Autowired
-    private NotificationRepository notificationRepository;
+    public JobService(JobRepository jobRepository, UserRepository userRepository,
+            FollowRepository followRepository, NotificationRepository notificationRepository) {
+        this.jobRepository = jobRepository;
+        this.userRepository = userRepository;
+        this.followRepository = followRepository;
+        this.notificationRepository = notificationRepository;
+    }
 
     public Page<Job> getAllJobs(Pageable pageable) {
         return jobRepository.findAll(pageable);

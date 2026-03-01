@@ -6,7 +6,6 @@ import in.thiruvikram.applytogether.entity.User;
 import in.thiruvikram.applytogether.repository.NotificationRepository;
 import in.thiruvikram.applytogether.repository.ReportRepository;
 import in.thiruvikram.applytogether.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -15,14 +14,16 @@ import java.util.List;
 @Service
 public class ReportService {
 
-    @Autowired
-    private ReportRepository reportRepository;
+    private final ReportRepository reportRepository;
+    private final UserRepository userRepository;
+    private final NotificationRepository notificationRepository;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private NotificationRepository notificationRepository;
+    public ReportService(ReportRepository reportRepository, UserRepository userRepository,
+            NotificationRepository notificationRepository) {
+        this.reportRepository = reportRepository;
+        this.userRepository = userRepository;
+        this.notificationRepository = notificationRepository;
+    }
 
     private static final double MAX_DISTANCE_METERS = 100.0;
     private static final int CIVIC_COINS_REWARD = 10;

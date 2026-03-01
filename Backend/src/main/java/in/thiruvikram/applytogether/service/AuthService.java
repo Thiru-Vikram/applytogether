@@ -6,26 +6,30 @@ import in.thiruvikram.applytogether.dto.RegisterRequest;
 import in.thiruvikram.applytogether.entity.User;
 import in.thiruvikram.applytogether.repository.UserRepository;
 import in.thiruvikram.applytogether.security.JwtUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
 
 @Service
 public class AuthService {
 
-        @Autowired
-        private UserRepository userRepository;
+        private final UserRepository userRepository;
+        private final PasswordEncoder passwordEncoder;
+        private final JwtUtil jwtUtil;
+        private final AuthenticationManager authenticationManager;
 
-        @Autowired
-        private PasswordEncoder passwordEncoder;
-
-        @Autowired
-        private JwtUtil jwtUtil;
-
-        @Autowired
-        private AuthenticationManager authenticationManager;
+        public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder,
+                        JwtUtil jwtUtil, AuthenticationManager authenticationManager) {
+                this.userRepository = userRepository;
+                this.passwordEncoder = passwordEncoder;
+                this.jwtUtil = jwtUtil;
+                this.authenticationManager = authenticationManager;
+        }
 
         public AuthResponse register(RegisterRequest request) {
                 if (userRepository.existsByUsername(request.getUsername())) {
@@ -58,12 +62,11 @@ public class AuthService {
 
                 // For strictness, let's force them to login, or generate token now.
                 // Let's generate token to be helpful.
-                String token = jwtUtil.generateToken(new org.springframework.security.core.userdetails.User(
+                UserDetails userDetails = new org.springframework.security.core.userdetails.User(
                                 user.getUsername(),
                                 user.getPassword(),
-                                java.util.Collections
-                                                .singletonList(new org.springframework.security.core.authority.SimpleGrantedAuthority(
-                                                                "ROLE_" + user.getRole()))));
+                                Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole())));
+                String token = jwtUtil.generateToken(userDetails);
 
                 return new AuthResponse(token, user.getUsername(), user.getRole(), user.getId());
         }
@@ -75,12 +78,11 @@ public class AuthService {
                 User user = userRepository.findByUsername(request.getUsername())
                                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-                String token = jwtUtil.generateToken(new org.springframework.security.core.userdetails.User(
+                UserDetails userDetails = new org.springframework.security.core.userdetails.User(
                                 user.getUsername(),
                                 user.getPassword(),
-                                java.util.Collections
-                                                .singletonList(new org.springframework.security.core.authority.SimpleGrantedAuthority(
-                                                                "ROLE_" + user.getRole()))));
+                                Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole())));
+                String token = jwtUtil.generateToken(userDetails);
 
                 return new AuthResponse(token, user.getUsername(), user.getRole(), user.getId());
         }

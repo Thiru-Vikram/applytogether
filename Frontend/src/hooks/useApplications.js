@@ -18,7 +18,9 @@ export const useApplications = () => {
 
     return {
         applications: data || [],
-        appliedJobIds: (data || []).map(app => app.job.id),
+        appliedJobIds: (data || [])
+            .map(app => app.job?.id)
+            .filter(Boolean),
         isLoading,
         isError,
         error,
