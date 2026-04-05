@@ -57,8 +57,14 @@ public class SecurityConfig {
                                                                 "/api/jobs/{id}")
                                                 .permitAll()
 
-                                                // Admin-only endpoints
-                                                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                                                // Public user/follow endpoints
+                                                .requestMatchers(HttpMethod.GET, "/api/users/{id}",
+                                                                "/api/users/username/**",
+                                                                "/api/users/{userId}/followers",
+                                                                "/api/users/{userId}/following",
+                                                                "/api/users/{userId}/followers/count",
+                                                                "/api/users/{userId}/following/count")
+                                                .permitAll()
 
                                                 // Job management
                                                 .requestMatchers(HttpMethod.POST, "/api/jobs").authenticated()
