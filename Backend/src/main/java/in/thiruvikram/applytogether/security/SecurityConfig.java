@@ -56,7 +56,6 @@ public class SecurityConfig {
                                                 .requestMatchers(HttpMethod.GET, "/api/jobs", "/api/jobs/user/**",
                                                                 "/api/jobs/{id}")
                                                 .permitAll()
-                                                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
                                                 // Admin-only endpoints
                                                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
