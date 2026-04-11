@@ -1,13 +1,27 @@
 package in.thiruvikram.applytogether.entity;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-import org.hibernate.annotations.CreationTimestamp;
-
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.CreationTimestamp;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "jobs")
 public class Job {
 
@@ -39,82 +53,4 @@ public class Job {
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime postedDate;
-
-    public Job() {
-    }
-
-    public Job(Long id, String title, String company, String jobUrl, String jobType, String batchYear,
-            LocalDateTime postedDate) {
-        this.id = id;
-        this.title = title;
-        this.company = company;
-        this.jobUrl = jobUrl;
-        this.jobType = jobType;
-        this.batchYear = batchYear;
-        this.postedDate = postedDate;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getCompany() {
-        return company;
-    }
-
-    public void setCompany(String company) {
-        this.company = company;
-    }
-
-    public String getJobUrl() {
-        return jobUrl;
-    }
-
-    public void setJobUrl(String jobUrl) {
-        this.jobUrl = jobUrl;
-    }
-
-    public String getJobType() {
-        return jobType;
-    }
-
-    public void setJobType(String jobType) {
-        this.jobType = jobType;
-    }
-
-    public String getBatchYear() {
-        return batchYear;
-    }
-
-    public void setBatchYear(String batchYear) {
-        this.batchYear = batchYear;
-    }
-
-    public LocalDateTime getPostedDate() {
-        return postedDate;
-    }
-
-    public void setPostedDate(LocalDateTime postedDate) {
-        this.postedDate = postedDate;
-    }
-
-    public User getPostedBy() {
-        return postedBy;
-    }
-
-    public void setPostedBy(User postedBy) {
-        this.postedBy = postedBy;
-    }
 }

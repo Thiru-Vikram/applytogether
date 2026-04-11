@@ -1,11 +1,26 @@
 package in.thiruvikram.applytogether.entity;
 
-import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
-
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.CreationTimestamp;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "follows", uniqueConstraints = {
         @UniqueConstraint(columnNames = { "follower_id", "following_id" })
 })
@@ -30,52 +45,9 @@ public class Follow {
     @Column(nullable = false)
     private String status = "PENDING"; // PENDING, ACCEPTED
 
-    public Follow() {
-    }
-
     public Follow(User follower, User following, String status) {
         this.follower = follower;
         this.following = following;
         this.status = status;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public User getFollower() {
-        return follower;
-    }
-
-    public void setFollower(User follower) {
-        this.follower = follower;
-    }
-
-    public User getFollowing() {
-        return following;
-    }
-
-    public void setFollowing(User following) {
-        this.following = following;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public LocalDateTime getFollowedAt() {
-        return followedAt;
-    }
-
-    public void setFollowedAt(LocalDateTime followedAt) {
-        this.followedAt = followedAt;
     }
 }

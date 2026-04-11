@@ -1,12 +1,10 @@
 package in.thiruvikram.applytogether.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-public class AssignStaffRequest {
-    private Long staffId;
+public class UpdateApplicationStatusRequest {
+    private String status;
 }
