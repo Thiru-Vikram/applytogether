@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { ThemeProvider } from "./context/ThemeContext";
@@ -18,12 +18,27 @@ import UserManagement from "./pages/UserManagement";
 import JobModeration from "./pages/JobModeration";
 import AdminReports from "./pages/AdminReports";
 import StaffPanel from "./pages/StaffPanel";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "react-hot-toast";
+
+const pingBackend = () => {
+  const backendUrl = import.meta.env.VITE_API_BASE_URL?.replace("/api", "");
+  fetch(`${backendUrl}/actuator/health`).catch(() => {});
+};
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 function AppContent() {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-
       <div className="app-layout">
         <main className="main-content">
           <Routes>
@@ -133,19 +148,11 @@ function AppContent() {
   );
 }
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Toaster } from "react-hot-toast";
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: 1,
-      refetchOnWindowFocus: false,
-    },
-  },
-});
-
 function App() {
+  useEffect(() => {
+    pingBackend();
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <Router>

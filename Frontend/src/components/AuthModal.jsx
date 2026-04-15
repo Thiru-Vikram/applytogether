@@ -32,7 +32,7 @@ const AuthModal = ({ show, onHide }) => {
     try {
       if (isLogin) {
         // Login
-        const response = await api.post("auth/login", {
+        const response = await api.post("/auth/login", {
           username: formData.username,
           password: formData.password,
         });
@@ -47,7 +47,7 @@ const AuthModal = ({ show, onHide }) => {
         }
       } else {
         // Register
-        await api.post("auth/register", {
+        await api.post("/auth/register", {
           username: formData.username,
           password: formData.password,
           email: formData.email,
@@ -57,7 +57,7 @@ const AuthModal = ({ show, onHide }) => {
         });
 
         // Auto login after registration
-        const loginResponse = await api.post("auth/login", {
+        const loginResponse = await api.post("/auth/login", {
           username: formData.username,
           password: formData.password,
         });

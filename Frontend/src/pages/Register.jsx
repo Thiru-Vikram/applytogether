@@ -35,7 +35,7 @@ const Register = () => {
         ...formData,
         role: "USER",
       };
-      await api.post("auth/register", payload);
+      await api.post("/auth/register", payload);
       navigate("/login");
     } catch (err) {
       setError(

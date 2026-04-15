@@ -33,7 +33,7 @@ const AddAdmin = () => {
         ...formData,
         role: "ADMIN",
       };
-      await api.post("auth/register", payload);
+      await api.post("/auth/register", payload);
       setSuccess(
         `Admin account for "${formData.username}" created successfully!`,
       );
