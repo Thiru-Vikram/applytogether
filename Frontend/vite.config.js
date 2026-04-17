@@ -7,4 +7,16 @@ export default defineConfig({
   build: {
     outDir: 'dist',
   },
+  server: {
+    proxy: {
+      // Proxy all /api requests to the Spring Boot backend during development.
+      // This means the browser always talks to the same origin (localhost:5173),
+      // so CORS preflight issues are completely eliminated in dev.
+      '/api': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  },
 })
