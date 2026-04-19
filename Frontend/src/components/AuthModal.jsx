@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Form, Button, Alert } from "react-bootstrap";
+import { Modal, Form, Button, Alert, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import api from "../api/axios";
@@ -105,7 +105,7 @@ const AuthModal = ({ show, onHide }) => {
   };
 
   return (
-    <Modal show={show} onHide={handleClose} centered size="md">
+    <Modal show={show} onHide={handleClose} centered size={isLogin ? "md" : "lg"}>
       <Modal.Header closeButton className="border-0 pb-0">
         <Modal.Title className="fw-bold fs-3">
           {isLogin ? "Welcome Back!" : "Join ApplyTogether"}
@@ -125,99 +125,139 @@ const AuthModal = ({ show, onHide }) => {
         )}
 
         <Form onSubmit={handleSubmit}>
-          {/* Username */}
-          <Form.Group className="mb-3">
-            <Form.Label className="fw-medium">Username</Form.Label>
-            <Form.Control
-              type="text"
-              name="username"
-              placeholder="Enter username"
-              value={formData.username}
-              onChange={handleChange}
-              required
-              className="py-2"
-            />
-          </Form.Group>
-
-          {/* Registration-only fields */}
-          {!isLogin && (
+          {isLogin ? (
             <>
+              {/* Login: single-column */}
               <Form.Group className="mb-3">
-                <Form.Label className="fw-medium">Full Name</Form.Label>
+                <Form.Label className="fw-medium">Username</Form.Label>
                 <Form.Control
                   type="text"
-                  name="fullName"
-                  placeholder="Enter full name"
-                  value={formData.fullName}
+                  name="username"
+                  placeholder="Enter username"
+                  value={formData.username}
                   onChange={handleChange}
                   required
                   className="py-2"
                 />
               </Form.Group>
-
-              <Form.Group className="mb-3">
-                <Form.Label className="fw-medium">Email</Form.Label>
+              <Form.Group className="mb-4">
+                <Form.Label className="fw-medium">Password</Form.Label>
                 <Form.Control
-                  type="email"
-                  name="email"
-                  placeholder="Enter email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  className="py-2"
-                />
-              </Form.Group>
-
-              <Form.Group className="mb-3">
-                <Form.Label className="fw-medium">Gender</Form.Label>
-                <Form.Select
-                  name="gender"
-                  value={formData.gender}
-                  onChange={handleChange}
-                  required
-                  className="py-2"
-                >
-                  <option value="">Select gender</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Other">Other</option>
-                </Form.Select>
-              </Form.Group>
-
-              <Form.Group className="mb-3">
-                <Form.Label className="fw-medium">Passing Year</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="passingYear"
-                  placeholder="e.g., 2024"
-                  value={formData.passingYear}
+                  type="password"
+                  name="password"
+                  placeholder="Enter password"
+                  value={formData.password}
                   onChange={handleChange}
                   required
                   className="py-2"
                 />
               </Form.Group>
             </>
-          )}
+          ) : (
+            <>
+              {/* Register: two-column grid */}
+              <h6 className="fw-bold mb-3 text-primary">Account Details</h6>
+              <Row className="g-3 mb-3">
+                <Col md={6}>
+                  <Form.Group>
+                    <Form.Label className="fw-medium small">Username</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="username"
+                      placeholder="johndoe123"
+                      value={formData.username}
+                      onChange={handleChange}
+                      required
+                      className="py-2"
+                    />
+                  </Form.Group>
+                </Col>
+                <Col md={6}>
+                  <Form.Group>
+                    <Form.Label className="fw-medium small">Email Address</Form.Label>
+                    <Form.Control
+                      type="email"
+                      name="email"
+                      placeholder="john@example.com"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                      className="py-2"
+                    />
+                  </Form.Group>
+                </Col>
+                <Col md={6}>
+                  <Form.Group>
+                    <Form.Label className="fw-medium small">Full Name</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="fullName"
+                      placeholder="John Doe"
+                      value={formData.fullName}
+                      onChange={handleChange}
+                      required
+                      className="py-2"
+                    />
+                  </Form.Group>
+                </Col>
+                <Col md={6}>
+                  <Form.Group>
+                    <Form.Label className="fw-medium small">Password</Form.Label>
+                    <Form.Control
+                      type="password"
+                      name="password"
+                      placeholder="••••••••"
+                      value={formData.password}
+                      onChange={handleChange}
+                      required
+                      className="py-2"
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
 
-          {/* Password */}
-          <Form.Group className="mb-4">
-            <Form.Label className="fw-medium">Password</Form.Label>
-            <Form.Control
-              type="password"
-              name="password"
-              placeholder="Enter password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              className="py-2"
-            />
-          </Form.Group>
+              <h6 className="fw-bold mb-3 text-primary">Other Details</h6>
+              <Row className="g-3 mb-3">
+                <Col md={6}>
+                  <Form.Group>
+                    <Form.Label className="fw-medium small">Passing Year</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="passingYear"
+                      placeholder="e.g., 2025"
+                      value={formData.passingYear}
+                      onChange={handleChange}
+                      required
+                      className="py-2"
+                    />
+                  </Form.Group>
+                </Col>
+                <Col md={6}>
+                  <Form.Group>
+                    <Form.Label className="fw-medium small">Gender</Form.Label>
+                    <Form.Select
+                      name="gender"
+                      value={formData.gender}
+                      onChange={handleChange}
+                      required
+                      className="py-2"
+                    >
+                      <option value="">Select gender</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Other">Other</option>
+                    </Form.Select>
+                  </Form.Group>
+                </Col>
+              </Row>
+            </>
+          )}
 
           {/* Submit Button */}
           <Button
             variant="primary"
             type="submit"
-            className="w-100 py-2 fw-bold rounded-pill"
+            className="w-100 py-2 fw-bold rounded-pill mt-2"
             disabled={loading}
           >
             {loading ? "Please wait..." : isLogin ? "Login" : "Create Account"}
