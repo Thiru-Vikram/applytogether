@@ -55,16 +55,16 @@ public class SecurityConfig {
                                                                 "/swagger-ui.html", "/api-docs/**")
                                                 .permitAll()
                                                 .requestMatchers(HttpMethod.GET, "/api/jobs", "/api/jobs/user/**",
-                                                                "/api/jobs/{id}")
+                                                                "/api/jobs/*")
                                                 .permitAll()
 
                                                 // Public user/follow endpoints
-                                                .requestMatchers(HttpMethod.GET, "/api/users/{id}",
+                                                .requestMatchers(HttpMethod.GET, "/api/users/*",
                                                                 "/api/users/username/**",
-                                                                "/api/users/{userId}/followers",
-                                                                "/api/users/{userId}/following",
-                                                                "/api/users/{userId}/followers/count",
-                                                                "/api/users/{userId}/following/count")
+                                                                "/api/users/*/followers",
+                                                                "/api/users/*/following",
+                                                                "/api/users/*/followers/count",
+                                                                "/api/users/*/following/count")
                                                 .permitAll()
 
                                                 // Job management
