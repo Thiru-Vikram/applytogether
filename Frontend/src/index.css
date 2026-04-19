@@ -1,18 +1,41 @@
 :root {
-  --primary: #2563eb; /* Professional Royal Blue */
-  --primary-hover: #1d4ed8;
-  --background: #ffffff; /* Pure White */
-  --surface: #f8fafc; /* Very light gray for cards */
-  --text: #000000; /* Pure Black */
-  --text-secondary: #475569;
-  --border: #e2e8f0;
-  --danger: #dc2626;
-  --success: #16a34a;
-  --primary-light: #eff6ff;
-  --success-light: #f0fdf4;
-  --warning-light: #fffbeb;
-  --danger-light: #fef2f2;
-  --info-light: #f0f9ff;
+  /* Brand Colors */
+  --primary: #4f46e5;           /* Rich Indigo — distinctive brand color */
+  --primary-hover: #4338ca;     /* Deeper indigo on hover */
+  --accent: #0ea5e9;            /* Sky blue accent */
+  --accent-hover: #0284c7;
+
+  /* Backgrounds */
+  --background: #f8f9ff;        /* Subtle blue-tinted white — warmer than pure white */
+  --surface: #ffffff;           /* Card / modal surfaces: clean white */
+
+  /* Text */
+  --text: #0f172a;              /* Deep charcoal — easier on the eyes than pure black */
+  --text-secondary: #64748b;    /* Slate gray */
+
+  /* Borders */
+  --border: #e0e7ff;            /* Indigo-tinted border */
+
+  /* Semantic */
+  --danger: #ef4444;
+  --success: #10b981;           /* Emerald green */
+
+  /* Light tints for badges / backgrounds */
+  --primary-light: #eef2ff;     /* Indigo 50 */
+  --success-light: #d1fae5;
+  --warning-light: #fef9c3;
+  --danger-light: #fee2e2;
+  --info-light: #e0f2fe;
+
+  /* Bootstrap 5 overrides — must be in :root */
+  --bs-primary: #4f46e5;
+  --bs-primary-rgb: 79, 70, 229;
+  --bs-link-color: #4f46e5;
+  --bs-link-color-rgb: 79, 70, 229;
+  --bs-link-hover-color: #4338ca;
+  --bs-body-bg: #f8f9ff;
+  --bs-body-color: #0f172a;
+  --bs-border-color: #e0e7ff;
 }
 
 /* Apply theme colors to body */
@@ -469,6 +492,53 @@ button {
 .min-h-screen {
   min-height: 100vh;
 }
+
+/* ── Bootstrap component overrides ──────────────────────────────── */
+
+/* Buttons */
+.btn-primary {
+  background-color: var(--primary) !important;
+  border-color: var(--primary) !important;
+  color: #fff !important;
+}
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+  background-color: var(--primary-hover) !important;
+  border-color: var(--primary-hover) !important;
+  box-shadow: 0 0 0 0.25rem rgba(79, 70, 229, 0.35) !important;
+}
+.btn-outline-primary {
+  color: var(--primary) !important;
+  border-color: var(--primary) !important;
+}
+.btn-outline-primary:hover {
+  background-color: var(--primary) !important;
+  color: #fff !important;
+}
+
+/* Links */
+a.text-primary, .text-primary { color: var(--primary) !important; }
+
+/* Badges */
+.badge.bg-primary { background-color: var(--primary) !important; }
+
+/* Focus rings */
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 0.25rem rgba(79, 70, 229, 0.2) !important;
+}
+
+/* Navbar active link */
+.nav-link.active { color: var(--primary) !important; }
+
+/* Progress bars */
+.progress-bar { background-color: var(--primary) !important; }
+
+/* Scrollbar to match brand */
+::-webkit-scrollbar-thumb { background: #c7d2fe; }
+::-webkit-scrollbar-thumb:hover { background: #a5b4fc; }
 
 /* Bootstrap overrides & enhancements */
 .transition {
