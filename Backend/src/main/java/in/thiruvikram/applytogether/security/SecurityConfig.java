@@ -103,7 +103,12 @@ public class SecurityConfig {
         @Bean
         public CorsConfigurationSource corsConfigurationSource() {
                 CorsConfiguration configuration = new CorsConfiguration();
-                configuration.setAllowedOrigins(Arrays.asList(frontendUrl.split(",")));
+                // Use allowedOriginPatterns so wildcard (*) works alongside allowCredentials=true.
+                // Explicit origins from config are listed first; the wildcard catches dev proxies
+                // like Replit's *.replit.dev preview domains.
+                java.util.List<String> patterns = new java.util.ArrayList<>(Arrays.asList(frontendUrl.split(",")));
+                patterns.add("*");
+                configuration.setAllowedOriginPatterns(patterns);
                 configuration.setAllowedMethods(
                                 Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"));
                 configuration.setAllowedHeaders(
