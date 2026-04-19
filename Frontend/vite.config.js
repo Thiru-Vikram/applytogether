@@ -8,10 +8,10 @@ export default defineConfig({
     outDir: 'dist',
   },
   server: {
+    host: '0.0.0.0',
+    port: 5000,
+    allowedHosts: true,
     proxy: {
-      // Proxy all /api requests to the Spring Boot backend during development.
-      // This means the browser always talks to the same origin (localhost:5173),
-      // so CORS preflight issues are completely eliminated in dev.
       '/api': {
         target: 'http://localhost:8080',
         changeOrigin: true,
