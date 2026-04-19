@@ -230,45 +230,6 @@ const Landing = () => {
           </Button>
         </Container>
       </section>
-
-      {/* Footer */}
-      <footer className="py-5 bg-white border-top text-center">
-        <Container>
-          <div className="d-flex align-items-center justify-content-center gap-2 mb-4">
-            <div className="bg-primary p-2 rounded-2 text-white fw-bold">
-              AT
-            </div>
-            <h3 className="fw-black mb-0 tracking-tight">ApplyTogether</h3>
-          </div>
-          <p className="text-muted mb-4 mx-auto" style={{ maxWidth: "400px" }}>
-            Built for students and friends to share, track, and succeed
-            together.
-          </p>
-          <div className="d-flex justify-content-center gap-4 mb-4">
-            <a
-              href="#"
-              className="text-muted text-decoration-none small hover-primary"
-            >
-              Privacy
-            </a>
-            <a
-              href="#"
-              className="text-muted text-decoration-none small hover-primary"
-            >
-              Terms
-            </a>
-            <a
-              href="#"
-              className="text-muted text-decoration-none small hover-primary"
-            >
-              Contact
-            </a>
-          </div>
-          <p className="text-muted small mb-0">
-            © 2026 ApplyTogether. Crafted with ❤️ for the Friends.
-          </p>
-        </Container>
-      </footer>
     </div>
   );
 };

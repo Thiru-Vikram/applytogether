@@ -6,11 +6,17 @@ import in.thiruvikram.applytogether.entity.User;
 import in.thiruvikram.applytogether.repository.ApplicationRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class ApplicationService {
+
+    private static final Set<String> ALLOWED_STATUSES = new HashSet<>(
+            Arrays.asList("APPLIED", "INTERVIEWING", "OFFERED", "REJECTED"));
 
     private final ApplicationRepository applicationRepository;
     private final JobService jobService;
@@ -48,18 +54,21 @@ public class ApplicationService {
 
         User currentUser = authService.getUserByUsername(username);
 
-        // Authorization: Admins, job posters, or the applicant can update status
+        // Authorization: only admins and job posters can update status.
         boolean isAdmin = currentUser.getRole().equals("ADMIN");
         boolean isJobPoster = application.getJob().getPostedBy() != null &&
                 application.getJob().getPostedBy().getUsername().equals(username);
-        boolean isApplicant = application.getUser() != null &&
-                application.getUser().getUsername().equals(username);
 
-        if (!isAdmin && !isJobPoster && !isApplicant) {
+        if (!isAdmin && !isJobPoster) {
             throw new RuntimeException("Unauthorized to update application status");
         }
 
-        application.setStatus(status);
+        String normalizedStatus = status.trim().toUpperCase();
+        if (!ALLOWED_STATUSES.contains(normalizedStatus)) {
+            throw new IllegalArgumentException("Invalid application status");
+        }
+
+        application.setStatus(normalizedStatus);
         return applicationRepository.save(application);
     }
 }

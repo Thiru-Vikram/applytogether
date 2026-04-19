@@ -44,10 +44,12 @@ public class SecurityConfig {
                 http
                                 .csrf(csrf -> csrf.disable())
                                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                                .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()))
                                 .authorizeHttpRequests(auth -> auth
                                                 // Public endpoints - MUST be first
                                                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                                 .requestMatchers("/api/auth/**").permitAll()
+                                                .requestMatchers("/h2-console/**").permitAll()
                                                 .requestMatchers("/actuator/health").permitAll()
                                                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**",
                                                                 "/swagger-ui.html", "/api-docs/**")
@@ -66,7 +68,7 @@ public class SecurityConfig {
                                                 .permitAll()
 
                                                 // Job management
-                                                .requestMatchers(HttpMethod.POST, "/api/jobs").authenticated()
+                                                .requestMatchers(HttpMethod.POST, "/api/jobs").hasRole("ADMIN")
                                                 .requestMatchers(HttpMethod.PUT, "/api/jobs/**").hasRole("ADMIN")
                                                 .requestMatchers(HttpMethod.DELETE, "/api/jobs/**").hasRole("ADMIN")
 

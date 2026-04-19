@@ -8,7 +8,9 @@ import in.thiruvikram.applytogether.repository.UserRepository;
 import in.thiruvikram.applytogether.security.JwtUtil;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,10 @@ import java.util.Collections;
 
 @Service
 public class AuthService {
+
+        private static final String ROLE_USER = "USER";
+        private static final String ROLE_STAFF = "STAFF";
+        private static final String ROLE_ADMIN = "ADMIN";
 
         private final UserRepository userRepository;
         private final PasswordEncoder passwordEncoder;
@@ -43,13 +49,7 @@ public class AuthService {
                 user.setUsername(request.getUsername());
                 user.setEmail(request.getEmail());
                 user.setPassword(passwordEncoder.encode(request.getPassword()));
-
-                // Default to USER if role is not provided or if handled strictly
-                // For simplicity allow passing role, but ideally should restrict ADMIN creation
-                String role = (request.getRole() != null && !request.getRole().isEmpty())
-                                ? request.getRole().toUpperCase()
-                                : "USER";
-                user.setRole(role);
+                user.setRole(resolveRoleForRegistration(request.getRole()));
                 user.setFullName(request.getFullName());
                 user.setGender(request.getGender());
                 user.setPassingYear(request.getPassingYear());
@@ -90,5 +90,28 @@ public class AuthService {
         public User getUserByUsername(String username) {
                 return userRepository.findByUsername(username)
                                 .orElseThrow(() -> new RuntimeException("User not found"));
+        }
+
+        private String resolveRoleForRegistration(String requestedRole) {
+                if (requestedRole == null || requestedRole.isBlank()) {
+                        return ROLE_USER;
+                }
+
+                String normalizedRole = requestedRole.trim().toUpperCase();
+                if (!ROLE_USER.equals(normalizedRole) && !ROLE_STAFF.equals(normalizedRole)
+                                && !ROLE_ADMIN.equals(normalizedRole)) {
+                        throw new IllegalArgumentException("Invalid role provided");
+                }
+
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                boolean isAdminRequest = authentication != null && authentication.isAuthenticated()
+                                && authentication.getAuthorities().stream()
+                                                .anyMatch(authority -> "ROLE_ADMIN".equals(authority.getAuthority()));
+
+                if (!isAdminRequest) {
+                        return ROLE_USER;
+                }
+
+                return normalizedRole;
         }
 }

@@ -537,6 +537,68 @@ button {
 
 .main-content {
   width: 100%;
+  flex: 1;
+}
+
+/* Global Footer */
+.site-footer {
+  background: #e9edf3;
+  border-radius: 24px 24px 0 0;
+  margin-top: 0;
+  padding: 3.25rem 1.5rem 2.75rem;
+  color: #334155;
+}
+
+.site-footer-brand {
+  font-weight: 800;
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+  color: #0f172a;
+}
+
+.site-footer-copy {
+  color: #64748b;
+  line-height: 1.65;
+  margin-bottom: 0;
+}
+
+.site-footer-heading {
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: #0f172a;
+  font-weight: 800;
+}
+
+.site-footer-link {
+  text-decoration: none;
+  color: #475569;
+  font-size: 0.97rem;
+  transition: color 0.2s ease;
+}
+
+.site-footer-link:hover {
+  color: #1e3a8a;
+}
+
+.site-footer-icon-link {
+  color: #94a3b8;
+  font-size: 1rem;
+  transition: color 0.2s ease;
+}
+
+.site-footer-icon-link:hover {
+  color: #1e3a8a;
+}
+
+@media (max-width: 768px) {
+  .site-footer {
+    border-radius: 20px 20px 0 0;
+    padding: 2.5rem 1rem 2.25rem;
+  }
+
+  .site-footer-brand {
+    font-size: 1.7rem;
+  }
 }
 
 /* Glassmorphism Sidebar */

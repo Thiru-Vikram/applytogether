@@ -33,8 +33,7 @@ api.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      window.location.href = '/login';
+      window.location.assign('/login');
       toast.error('Session expired. Please login again.');
     } else if (error.response?.status === 403) {
       toast.error('You do not have permission to perform this action.');

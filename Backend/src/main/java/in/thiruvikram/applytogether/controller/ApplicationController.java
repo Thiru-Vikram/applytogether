@@ -3,6 +3,7 @@ package in.thiruvikram.applytogether.controller;
 import java.security.Principal;
 import java.util.List;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,7 +46,7 @@ public class ApplicationController extends BaseController {
     @PatchMapping("/{id}/status")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Application> updateStatus(@PathVariable Long id,
-            @RequestBody UpdateApplicationStatusRequest payload,
+            @Valid @RequestBody UpdateApplicationStatusRequest payload,
             Principal principal) {
         return ResponseEntity
                 .ok(applicationService.updateApplicationStatus(id, payload.getStatus(), principal.getName()));

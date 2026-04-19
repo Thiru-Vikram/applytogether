@@ -3,6 +3,7 @@ package in.thiruvikram.applytogether.controller;
 import java.security.Principal;
 import java.util.List;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,7 +37,7 @@ public class ReportController extends BaseController {
      */
     @PostMapping("/submit")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Report> submitReport(@RequestBody ReportSubmitRequest request, Principal principal) {
+    public ResponseEntity<Report> submitReport(@Valid @RequestBody ReportSubmitRequest request, Principal principal) {
         User user = getCurrentUser(principal);
         Report report = reportService.submitReport(
                 user,
@@ -92,7 +93,7 @@ public class ReportController extends BaseController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Report> assignToStaff(
             @PathVariable Long reportId,
-            @RequestBody AssignStaffRequest request,
+            @Valid @RequestBody AssignStaffRequest request,
             Principal principal) {
         User admin = getCurrentUser(principal);
         Report report = reportService.assignToStaff(reportId, request.getStaffId(), admin);
@@ -106,7 +107,7 @@ public class ReportController extends BaseController {
     @PreAuthorize("hasRole('STAFF') or hasRole('ADMIN')")
     public ResponseEntity<Report> resolveReport(
             @PathVariable Long reportId,
-            @RequestBody ResolveReportRequest request,
+            @Valid @RequestBody ResolveReportRequest request,
             Principal principal) {
         User staff = getCurrentUser(principal);
         Report report = reportService.resolveReport(
@@ -125,7 +126,7 @@ public class ReportController extends BaseController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Report> verifyReport(
             @PathVariable Long reportId,
-            @RequestBody VerifyReportRequest request,
+            @Valid @RequestBody VerifyReportRequest request,
             Principal principal) {
         User user = getCurrentUser(principal);
         Report report = reportService.verifyAndClose(
