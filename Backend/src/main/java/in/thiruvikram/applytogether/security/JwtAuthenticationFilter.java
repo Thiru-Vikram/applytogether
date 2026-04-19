@@ -1,9 +1,11 @@
 package in.thiruvikram.applytogether.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.MediaType;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,6 +18,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.Map;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -37,6 +41,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String jwt;
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            // No token present — let the request proceed; public endpoints will work,
+            // protected endpoints will be rejected by the authorization layer.
             filterChain.doFilter(request, response);
             return;
         }
@@ -59,9 +65,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
         } catch (JwtException | UsernameNotFoundException ex) {
-            // Token is malformed, expired, has wrong signature, or the user no longer exists
-            // (e.g. after an in-memory DB restart). Skip authentication — public endpoints remain
-            // accessible and protected endpoints are rejected by the authorization layer as normal.
+            // Token is present but invalid/expired — return 401 immediately so the frontend
+            // can clear the stale token and redirect the user to login.
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            new ObjectMapper().writeValue(response.getOutputStream(), Map.of(
+                    "timestamp", LocalDateTime.now().toString(),
+                    "status", 401,
+                    "error", "Unauthorized",
+                    "message", "Session expired. Please log in again."
+            ));
+            return;
         }
 
         filterChain.doFilter(request, response);
