@@ -67,8 +67,8 @@ public class SecurityConfig {
                                                                 "/api/users/*/following/count")
                                                 .permitAll()
 
-                                                // Job management
-                                                .requestMatchers(HttpMethod.POST, "/api/jobs").hasRole("ADMIN")
+                                                // Job management — any authenticated user can post; only admins can edit/delete
+                                                .requestMatchers(HttpMethod.POST, "/api/jobs").authenticated()
                                                 .requestMatchers(HttpMethod.PUT, "/api/jobs/**").hasRole("ADMIN")
                                                 .requestMatchers(HttpMethod.DELETE, "/api/jobs/**").hasRole("ADMIN")
 

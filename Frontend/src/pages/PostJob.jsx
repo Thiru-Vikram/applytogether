@@ -24,7 +24,7 @@ const PostJob = () => {
             await api.post('/jobs', formData);
             navigate('/jobs');
         } catch (err) {
-            setError('Failed to post job. Please check if you have admin permissions.');
+            setError('Failed to post job. Please try again.');
             console.error(err);
         } finally {
             setLoading(false);

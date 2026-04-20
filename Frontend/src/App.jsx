@@ -73,7 +73,7 @@ function AppContent() {
             <Route
               path="/post-job"
               element={
-                <ProtectedRoute adminOnly={true}>
+                <ProtectedRoute>
                   <PostJob />
                 </ProtectedRoute>
               }
