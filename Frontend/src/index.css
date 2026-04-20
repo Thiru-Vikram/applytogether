@@ -948,7 +948,7 @@ a.text-primary, .text-primary { color: var(--primary) !important; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 68px;
+  height: 74px;
   padding: 0 1.75rem;
   background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(12px);
