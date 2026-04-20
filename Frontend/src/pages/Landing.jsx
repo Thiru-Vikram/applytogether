@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -7,6 +7,8 @@ const Landing = () => {
   const { user } = useAuth();
   const [activeWord, setActiveWord] = useState("With Friends");
   const [stats, setStats] = useState({ jobs: 0, users: 0, applied: 0 });
+  const [stepsVisible, setStepsVisible] = useState(false);
+  const stepsRef = useRef(null);
   const words = ["With Friends"];
 
   useEffect(() => {
@@ -26,6 +28,15 @@ const Landing = () => {
       clearInterval(interval);
       clearTimeout(timeout);
     };
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setStepsVisible(true); },
+      { threshold: 0.3 }
+    );
+    if (stepsRef.current) observer.observe(stepsRef.current);
+    return () => observer.disconnect();
   }, []);
 
   return (
@@ -159,7 +170,7 @@ const Landing = () => {
       </section>
 
       {/* How it Works */}
-      <section className="py-5 bg-white border-top border-bottom">
+      <section className="py-5 bg-white border-top border-bottom" ref={stepsRef}>
         <Container className="py-5">
           <div className="text-center mb-5">
             <h2 className="fw-black display-5 mb-3 tracking-tight">
@@ -169,37 +180,57 @@ const Landing = () => {
               Get hired in three simple steps
             </p>
           </div>
-          <Row className="g-4 text-center">
-            <Col md={4} className="fade-in" style={{ animationDelay: "0.1s" }}>
-              <div className="mb-4 display-3 fw-black text-primary opacity-25">
-                01
-              </div>
-              <h4 className="fw-bold mb-3">Create Your Profile</h4>
-              <p className="text-secondary">
-                Register on the platform and connect with your friends.
-              </p>
-            </Col>
-            <Col md={4} className="fade-in" style={{ animationDelay: "0.2s" }}>
-              <div className="mb-4 display-3 fw-black text-primary opacity-25">
-                02
-              </div>
-              <h4 className="fw-bold mb-3">Discover Jobs</h4>
-              <p className="text-secondary">
-                Post jobs you’ve applied for and explore jobs shared by your
-                friends. You can apply to jobs your friends have applied for—and
-                they can apply to yours too.
-              </p>
-            </Col>
-            <Col md={4} className="fade-in" style={{ animationDelay: "0.3s" }}>
-              <div className="mb-4 display-3 fw-black text-primary opacity-25">
-                03
-              </div>
-              <h4 className="fw-bold mb-3">Track Your Application</h4>
-              <p className="text-secondary">
-                Easily track all the jobs you’ve applied for in one place.
-              </p>
-            </Col>
-          </Row>
+
+          {/* Steps with animated connector line */}
+          <div className="hiw-wrapper">
+            {/* Track sits behind the circles, fills left→right */}
+            <div className="hiw-track">
+              <div className={`hiw-track-fill${stepsVisible ? " hiw-track-animate" : ""}`} />
+            </div>
+
+            <Row className="g-0 text-center position-relative">
+              {[
+                {
+                  num: "01",
+                  title: "Create Your Profile",
+                  desc: "Register on the platform and connect with your friends.",
+                  icon: "person-circle",
+                  delay: 0,
+                },
+                {
+                  num: "02",
+                  title: "Discover Jobs",
+                  desc: "Post jobs you've applied for and explore jobs shared by friends. Apply to theirs — they apply to yours.",
+                  icon: "briefcase",
+                  delay: 0.55,
+                },
+                {
+                  num: "03",
+                  title: "Track Your Application",
+                  desc: "Easily track all the jobs you've applied for in one place.",
+                  icon: "bar-chart-line",
+                  delay: 1.1,
+                },
+              ].map((step) => (
+                <Col md={4} key={step.num} className="px-4">
+                  <div
+                    className={`hiw-step${stepsVisible ? " hiw-step-visible" : ""}`}
+                    style={{ transitionDelay: `${step.delay}s` }}
+                  >
+                    {/* Circle with icon */}
+                    <div className="hiw-circle-wrap">
+                      <div className="hiw-circle">
+                        <i className={`bi bi-${step.icon}`}></i>
+                      </div>
+                      <span className="hiw-num">{step.num}</span>
+                    </div>
+                    <h5 className="fw-bold mt-4 mb-2">{step.title}</h5>
+                    <p className="text-secondary small mb-0">{step.desc}</p>
+                  </div>
+                </Col>
+              ))}
+            </Row>
+          </div>
         </Container>
       </section>
 

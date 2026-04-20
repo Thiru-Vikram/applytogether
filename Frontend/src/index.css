@@ -829,3 +829,112 @@ a.text-primary, .text-primary { color: var(--primary) !important; }
   background-color: rgba(79, 70, 229, 0.03) !important;
   transform: scale(1.005);
 }
+
+/* ── How It Works — animated step connector ──────────────────────── */
+
+.hiw-wrapper {
+  position: relative;
+  padding: 2rem 0 0;
+}
+
+/* The grey track that sits behind the circles */
+.hiw-track {
+  position: absolute;
+  top: 52px; /* vertically centred on the 64px circles */
+  left: calc(16.67% + 32px);   /* start at centre of col 1 circle */
+  right: calc(16.67% + 32px);  /* end at centre of col 3 circle */
+  height: 3px;
+  background: #e2e8f0;
+  border-radius: 99px;
+  overflow: hidden;
+  z-index: 0;
+}
+
+/* The indigo fill that animates from 0 → 100% */
+.hiw-track-fill {
+  width: 0;
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+  border-radius: 99px;
+  transition: width 1.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.hiw-track-fill.hiw-track-animate {
+  width: 100%;
+}
+
+/* Each step card starts invisible and floats up on reveal */
+.hiw-step {
+  position: relative;
+  z-index: 1;
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.hiw-step.hiw-step-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Circle container — centres circle + badge */
+.hiw-circle-wrap {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* The icon circle */
+.hiw-circle {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+  border: 3px solid #c7d2fe;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  color: var(--primary);
+  box-shadow: 0 4px 16px rgba(79, 70, 229, 0.18);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+.hiw-step.hiw-step-visible .hiw-circle {
+  animation: hiw-pop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* Step number badge */
+.hiw-num {
+  position: absolute;
+  top: -10px;
+  right: -12px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.35);
+  border: 2px solid #fff;
+}
+
+/* Pop keyframe for circles */
+@keyframes hiw-pop {
+  0%   { transform: scale(0.6); opacity: 0; }
+  70%  { transform: scale(1.08); }
+  100% { transform: scale(1);   opacity: 1; }
+}
+
+/* Mobile: vertical connector */
+@media (max-width: 767px) {
+  .hiw-track {
+    display: none;
+  }
+  .hiw-step {
+    margin-bottom: 2.5rem;
+  }
+}
