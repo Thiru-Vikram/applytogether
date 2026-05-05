@@ -14,7 +14,8 @@ A social job-sharing platform where friends help friends find opportunities. Bui
 ## 🛠️ Tech Stack
 
 ### Frontend
-- **React 19** - UI framework
+
+- **React 18** - UI framework
 - **Vite** - Build tool and dev server
 - **React Router** - Client-side routing
 - **React Bootstrap** - UI components
@@ -22,10 +23,11 @@ A social job-sharing platform where friends help friends find opportunities. Bui
 - **Recharts** - Data visualization
 
 ### Backend
+
 - **Spring Boot 3.4** - Application framework
 - **Spring Security** - Authentication & authorization
 - **Spring Data JPA** - Database ORM
-- **MySQL** - Database
+- **PostgreSQL** - Production database (H2 for local dev)
 - **JWT** - Token-based authentication
 - **HikariCP** - Connection pooling
 
@@ -48,16 +50,26 @@ ApplyTogether/
 ## 🚀 Quick Start (Local Development)
 
 ### Prerequisites
+
 - Java 21+
 - Node.js 18+
-- MySQL 8+
+- Optional: Docker (for local PostgreSQL)
 
 ### 1. Backend Setup
-1. Create a MySQL database: `CREATE DATABASE applytogether;`
-2. Update `Backend/src/main/resources/application.properties` with your DB credentials.
-3. Run: `cd Backend && ./mvnw spring-boot:run`
+
+1. By default, the backend uses an in-memory H2 database (no setup needed).
+2. Run: `cd Backend && ./mvnw spring-boot:run`
+
+Optional: Local PostgreSQL via Docker
+
+1. Run: `docker compose up -d`
+2. Set environment variables:
+   - `SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/applytogether`
+   - `SPRING_DATASOURCE_USERNAME=postgres`
+   - `SPRING_DATASOURCE_PASSWORD=password`
 
 ### 2. Frontend Setup
+
 1. Install dependencies: `cd Frontend && npm install`
 2. Run: `npm run dev`
 
@@ -68,17 +80,19 @@ ApplyTogether/
 This guide explains how to deploy using **Netlify** for the frontend and **Railway** for the backend/DB.
 
 ### 1. Backend & DB (Railway)
-1. **Provision MySQL**: Log in to Railway and add a MySQL service.
+
+1. **Provision PostgreSQL**: Log in to Railway and add a PostgreSQL service.
 2. **Deploy Backend**: Connect your GitHub repo. Set the Root Directory to `Backend`.
 3. **Environment Variables**:
-   - `SPRING_DATASOURCE_URL`: `jdbc:mysql://${{MYSQLHOST}}:${{MYSQLPORT}}/${{MYSQLDATABASE}}`
-   - `SPRING_DATASOURCE_USERNAME`: `${{MYSQLUSER}}`
-   - `SPRING_DATASOURCE_PASSWORD`: `${{MYSQLPASSWORD}}`
+   - `SPRING_DATASOURCE_URL`: `jdbc:postgresql://${{PGHOST}}:${{PGPORT}}/${{PGDATABASE}}`
+   - `SPRING_DATASOURCE_USERNAME`: `${{PGUSER}}`
+   - `SPRING_DATASOURCE_PASSWORD`: `${{PGPASSWORD}}`
    - `SPRING_PROFILES_ACTIVE`: `prod`
    - `JWT_SECRET`: (Your secure 256-bit secret)
    - `FRONTEND_URL`: (Your Netlify domain)
 
 ### 2. Frontend (Netlify)
+
 1. **Connect GitHub**: Select your repo.
 2. **Settings**:
    - Base directory: `Frontend`
@@ -91,6 +105,7 @@ This guide explains how to deploy using **Netlify** for the frontend and **Railw
 ## 📊 Performance & Optimization Summary
 
 ### Backend Optimizations
+
 - ✅ **Lazy Initialization**: Configured for faster startup.
 - ✅ **HikariCP**: Connection pool limited (2-10) to save memory.
 - ✅ **Batching**: JPA batch processing enabled for bulk operations.
@@ -98,13 +113,15 @@ This guide explains how to deploy using **Netlify** for the frontend and **Railw
 - ✅ **Security**: Stack traces hidden and CORS strictly configured.
 
 ### Frontend Optimizations
+
 - ✅ **Bundle Size**: ~500-600KB (gzipped).
 - ✅ **Memoization**: AuthContext optimized with `useMemo` to prevent re-renders.
 - ✅ **Build**: Tree-shaking and asset optimization via Vite.
 
 ### Resource Estimates (Cloud)
+
 - **Backend JVM**: ~512MB RAM.
-- **MySQL**: Managed footprint.
+- **PostgreSQL**: Managed footprint.
 - **Frontend**: Zero server cost (served via CDN).
 
 ---
@@ -120,6 +137,7 @@ This guide explains how to deploy using **Netlify** for the frontend and **Railw
 ---
 
 ## 👨‍💻 Author
+
 **Thiru Vikram** - [GitHub](https://github.com/Thiru-Vikram)
 
 **Made with ❤️ for the Friends**
