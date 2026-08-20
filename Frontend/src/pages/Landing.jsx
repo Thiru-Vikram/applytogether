@@ -1,117 +1,88 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Container, Row, Col, Card, Button } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import {
+  Badge,
+  Button,
+  Card,
+  Col,
+  Container,
+  ProgressBar,
+  Row,
+} from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+
+const steps = [
+  {
+    num: "01",
+    title: "Create Your Profile",
+    desc: "Register on the platform and connect with your friends.",
+    icon: "person-circle",
+  },
+  {
+    num: "02",
+    title: "Discover Jobs",
+    desc: "Post jobs you have applied for and explore jobs shared by friends.",
+    icon: "briefcase",
+  },
+  {
+    num: "03",
+    title: "Track Applications",
+    desc: "Keep every job you have applied for organized in one place.",
+    icon: "bar-chart-line",
+  },
+];
 
 const Landing = () => {
-  const { user } = useAuth();
-  const [activeWord, setActiveWord] = useState("With Friends");
   const [stats, setStats] = useState({ jobs: 0, users: 0, applied: 0 });
-  const [stepsVisible, setStepsVisible] = useState(false);
-  const stepsRef = useRef(null);
-  const words = ["With Friends"];
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveWord((prev) => {
-        const currentIndex = words.indexOf(prev);
-        return words[(currentIndex + 1) % words.length];
-      });
-    }, 2000);
-
-    // Simple counter animation effect
     const timeout = setTimeout(() => {
       setStats({ jobs: 450, users: 1200, applied: 850 });
     }, 500);
 
-    return () => {
-      clearInterval(interval);
-      clearTimeout(timeout);
-    };
-  }, []);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setStepsVisible(true); },
-      { threshold: 0.3 }
-    );
-    if (stepsRef.current) observer.observe(stepsRef.current);
-    return () => observer.disconnect();
+    return () => clearTimeout(timeout);
   }, []);
 
   return (
-    <div
-      className="landing-v2 position-relative overflow-hidden"
-      style={{ backgroundColor: "#fcfdfe" }}
-    >
-      {/* Background Orbs */}
-      <div
-        className="blob blob-1"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%)",
-        }}
-      ></div>
-      <div
-        className="blob blob-2"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(244, 63, 94, 0.08) 0%, transparent 70%)",
-        }}
-      ></div>
-
-      {/* Hero Section */}
-      <section className="hero-section min-vh-100 d-flex align-items-center py-5">
-        <Container>
+    <div>
+      <section className="py-5 bg-white border-bottom">
+        <Container className="py-5">
           <Row className="align-items-center g-5">
             <Col lg={7} className="text-center text-lg-start">
-              <h1
-                className="display-1 fw-black mb-4 tracking-tight fade-in"
-                style={{ color: "#0f172a", lineHeight: "1.2" }}
-              >
-                Find your next job
-                <br />
-                <span
-                  className="text-gradient"
-                  style={{ paddingRight: "0.2em", paddingBottom: "0.1em" }}
-                >
-                  {activeWord}
-                </span>
+              <Badge bg="primary" className="rounded-pill px-3 py-2 mb-3">
+                Career collaboration
+              </Badge>
+              <h1 className="display-2 fw-bold mb-4 text-dark">
+                Find your next job with friends
               </h1>
-              <p
-                className="lead text-secondary mb-5 pe-lg-5 fade-in"
-                style={{ fontSize: "1.2rem", animationDelay: "0.1s" }}
-              >
-                Stop searching jobs through thousands of random portals.
-                ApplyTogether brings you the best jobs, recommended by the
-                friends you trust. It's the job search, social media platform.
+              <p className="lead text-secondary mb-5 pe-lg-5">
+                Stop searching through thousands of random portals.
+                ApplyTogether brings you jobs recommended by people you trust.
               </p>
-              <div
-                className="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start fade-in"
-                style={{ animationDelay: "0.2s" }}
-              >
+              <div className="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start">
                 <Button
                   as={Link}
                   to="/register"
                   variant="primary"
-                  className="btn-glow px-5 py-3 fw-bold rounded-3"
+                  size="lg"
+                  className="px-5 fw-bold"
                 >
                   Start Your Journey
                 </Button>
                 <Button
                   as={Link}
                   to="/login"
-                  variant="light"
-                  className="px-5 py-3 fw-bold rounded-3 border bg-white shadow-sm"
+                  variant="outline-primary"
+                  size="lg"
+                  className="px-5 fw-bold"
                 >
                   Login
                 </Button>
               </div>
             </Col>
 
-            <Col lg={5} className="fade-in" style={{ animationDelay: "0.3s" }}>
-              <div className="hero-visual position-relative">
-                <div className="glass-card p-4 rounded-4 shadow-xl border border-white">
+            <Col lg={5}>
+              <Card className="border-0 shadow-sm rounded-4">
+                <Card.Body className="p-4">
                   <div className="d-flex align-items-center gap-3 mb-4">
                     <div className="bg-primary bg-opacity-10 p-3 rounded-4">
                       <i className="bi bi-briefcase-fill text-primary h4 mb-0"></i>
@@ -121,141 +92,114 @@ const Landing = () => {
                       <small className="text-muted">Netflix</small>
                     </div>
                   </div>
-                  <div className="d-flex gap-2 mb-4">
-                    <span className="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-2 border border-success border-opacity-10">
+
+                  <div className="d-flex flex-wrap gap-2 mb-4">
+                    <Badge bg="success" className="rounded-pill px-3 py-2">
                       Full Time
-                    </span>
-                    <span className="badge bg-warning bg-opacity-10 text-warning rounded-pill px-3 py-2 border border-warning border-opacity-10">
+                    </Badge>
+                    <Badge
+                      bg="warning"
+                      text="dark"
+                      className="rounded-pill px-3 py-2"
+                    >
                       Batch 2026
-                    </span>
+                    </Badge>
                   </div>
-                  <div className="p-3 bg-light rounded-3 mb-3 border">
-                    <div className="d-flex justify-content-between mb-1">
+
+                  <div className="p-3 bg-light rounded-3 border mb-3">
+                    <div className="d-flex justify-content-between mb-2">
                       <small className="fw-bold">Interview Prep</small>
-                      <small className="text-primary">85%</small>
+                      <small className="text-primary fw-bold">85%</small>
                     </div>
-                    <div className="progress" style={{ height: "6px" }}>
-                      <div
-                        className="progress-bar"
-                        style={{ width: "85%" }}
-                      ></div>
-                    </div>
+                    <ProgressBar now={85} />
                   </div>
-                  <Button
-                    className="w-100 fw-bold py-2 rounded-3 shadow-sm btn-primary"
-                    disabled
-                  >
+
+                  <Button className="w-100 fw-bold py-2" disabled>
                     Apply Now
                   </Button>
-                </div>
-
-                {/* Floating Elements */}
-                <div
-                  className="floating-card position-absolute d-none d-md-flex align-items-center gap-2 bg-white p-2 px-3 rounded-pill shadow border"
-                  style={{ top: "-20px", left: "-30px" }}
-                >
-                  <span className="text-success">●</span>{" "}
-                  <small className="fw-bold">42 New Jobs</small>
-                </div>
-                <div
-                  className="floating-card position-absolute d-none d-md-flex align-items-center gap-2 bg-white p-2 px-3 rounded-pill shadow border"
-                  style={{ bottom: "40px", right: "-20px" }}
-                >
-                  <small className="fw-bold text-primary">✓ Applied</small>
-                </div>
-              </div>
+                </Card.Body>
+              </Card>
             </Col>
           </Row>
         </Container>
       </section>
 
-      {/* How it Works */}
-      <section className="py-5 bg-white border-top border-bottom" ref={stepsRef}>
-        <Container className="py-5">
+      <section className="py-5">
+        <Container>
+          <Row className="g-4 text-center">
+            <Col md={4}>
+              <Card className="h-100 border-0 shadow-sm">
+                <Card.Body className="p-4">
+                  <h3 className="fw-bold text-primary">{stats.jobs}+</h3>
+                  <p className="text-secondary mb-0">Jobs shared</p>
+                </Card.Body>
+              </Card>
+            </Col>
+            <Col md={4}>
+              <Card className="h-100 border-0 shadow-sm">
+                <Card.Body className="p-4">
+                  <h3 className="fw-bold text-primary">{stats.users}+</h3>
+                  <p className="text-secondary mb-0">Active users</p>
+                </Card.Body>
+              </Card>
+            </Col>
+            <Col md={4}>
+              <Card className="h-100 border-0 shadow-sm">
+                <Card.Body className="p-4">
+                  <h3 className="fw-bold text-primary">{stats.applied}+</h3>
+                  <p className="text-secondary mb-0">Applications tracked</p>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+        </Container>
+      </section>
+
+      <section className="py-5 bg-white border-top border-bottom">
+        <Container>
           <div className="text-center mb-5">
-            <h2 className="fw-black display-5 mb-3 tracking-tight">
-              How it works
-            </h2>
-            <p className="text-secondary lead">
+            <h2 className="fw-bold display-5 mb-3">How it works</h2>
+            <p className="text-secondary lead mb-0">
               Get hired in three simple steps
             </p>
           </div>
 
-          {/* Steps with animated connector line */}
-          <div className="hiw-wrapper">
-            {/* Track sits behind the circles, fills left→right */}
-            <div className="hiw-track">
-              <div className={`hiw-track-fill${stepsVisible ? " hiw-track-animate" : ""}`} />
-            </div>
-
-            <Row className="g-0 text-center position-relative">
-              {[
-                {
-                  num: "01",
-                  title: "Create Your Profile",
-                  desc: "Register on the platform and connect with your friends.",
-                  icon: "person-circle",
-                  delay: 0,
-                },
-                {
-                  num: "02",
-                  title: "Discover Jobs",
-                  desc: "Post jobs you've applied for and explore jobs shared by friends. Apply to theirs — they apply to yours.",
-                  icon: "briefcase",
-                  delay: 0.55,
-                },
-                {
-                  num: "03",
-                  title: "Track Your Application",
-                  desc: "Easily track all the jobs you've applied for in one place.",
-                  icon: "bar-chart-line",
-                  delay: 1.1,
-                },
-              ].map((step) => (
-                <Col md={4} key={step.num} className="px-4">
-                  <div
-                    className={`hiw-step${stepsVisible ? " hiw-step-visible" : ""}`}
-                    style={{ transitionDelay: `${step.delay}s` }}
-                  >
-                    {/* Circle with icon */}
-                    <div className="hiw-circle-wrap">
-                      <div className="hiw-circle">
-                        <i className={`bi bi-${step.icon}`}></i>
-                      </div>
-                      <span className="hiw-num">{step.num}</span>
+          <Row className="g-4 text-center">
+            {steps.map((step) => (
+              <Col md={4} key={step.num}>
+                <Card className="h-100 border-0 shadow-sm">
+                  <Card.Body className="p-4">
+                    <div className="d-inline-flex align-items-center justify-content-center bg-primary bg-opacity-10 text-primary rounded-circle p-4 mb-3">
+                      <i className={`bi bi-${step.icon} h3 mb-0`}></i>
                     </div>
-                    <h5 className="fw-bold mt-4 mb-2">{step.title}</h5>
+                    <br />
+                    <Badge bg="primary" className="rounded-pill mb-3">
+                      {step.num}
+                    </Badge>
+                    <h5 className="fw-bold mb-2">{step.title}</h5>
                     <p className="text-secondary small mb-0">{step.desc}</p>
-                  </div>
-                </Col>
-              ))}
-            </Row>
-          </div>
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
+          </Row>
         </Container>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-5 bg-primary text-white text-center position-relative overflow-hidden">
-        <div
-          className="position-absolute w-100 h-100 top-0 start-0 opacity-10"
-          style={{
-            background:
-              "url(https://www.transparenttextures.com/patterns/cubes.png)",
-          }}
-        ></div>
-        <Container className="py-5 position-relative">
-          <h2 className="display-4 fw-black mb-4">
+      <section className="py-5 bg-primary text-white text-center">
+        <Container className="py-5">
+          <h2 className="display-5 fw-bold mb-4">
             Ready to land your next role?
           </h2>
           <p className="lead mb-5 opacity-75">
-            Don't search harder, search smarter. Join ApplyTogether today.
+            Do not search harder, search smarter. Join ApplyTogether today.
           </p>
           <Button
             as={Link}
             to="/register"
             size="lg"
             variant="light"
-            className="px-5 py-3 fw-bold text-primary shadow-lg border-0"
+            className="px-5 py-3 fw-bold text-primary border-0"
           >
             Join Now Free
           </Button>

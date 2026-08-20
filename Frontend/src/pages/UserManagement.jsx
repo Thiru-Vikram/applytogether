@@ -119,14 +119,14 @@ const UserManagement = () => {
     const activeBatches = [...new Set(users.filter(u => u.passingYear).map(u => u.passingYear))].length;
 
     const StatCard = ({ title, value, icon, color }) => (
-        <Card className="border-0 shadow-sm h-100 rounded-4 transition hover-shadow">
+        <Card className="border-0 shadow-sm h-100 rounded-4">
             <Card.Body className="p-4">
                 <div className="d-flex align-items-center justify-content-between">
                     <div>
-                        <p className="text-secondary small fw-bold mb-1 text-uppercase tracking-wider">{title}</p>
-                        <h2 className="fw-black mb-0">{value}</h2>
+                        <p className="text-secondary small fw-bold mb-1 text-uppercase">{title}</p>
+                        <h2 className="fw-bold mb-0">{value}</h2>
                     </div>
-                    <div className={`p-3 rounded-4 bg-${color}-light text-${color}`}>
+                    <div className={`p-3 rounded-4 bg-${color} bg-opacity-10 text-${color}`}>
                         <i className={`bi bi-${icon} fs-3`}></i>
                     </div>
                 </div>
@@ -137,7 +137,7 @@ const UserManagement = () => {
     return (
         <Container className="py-5">
             <div className="mb-5">
-                <h1 className="fw-black display-5 mb-2">User Management</h1>
+                <h1 className="fw-bold display-5 mb-2">User Management</h1>
                 <p className="text-muted fs-5">Manage all registered users and their details.</p>
             </div>
 
@@ -203,28 +203,28 @@ const UserManagement = () => {
                     <thead className="bg-light">
                         <tr>
                             <th 
-                                className="px-4 py-3 border-0 cursor-pointer user-select-none" 
+                                className="px-4 py-3 border-0 user-select-none" 
                                 onClick={() => handleSort('username')}
                                 style={{ cursor: 'pointer' }}
                             >
                                 User {sortColumn === 'username' && (sortDirection === 'asc' ? '↑' : '↓')}
                             </th>
                             <th 
-                                className="py-3 border-0 cursor-pointer user-select-none" 
+                                className="py-3 border-0 user-select-none" 
                                 onClick={() => handleSort('role')}
                                 style={{ cursor: 'pointer' }}
                             >
                                 Role {sortColumn === 'role' && (sortDirection === 'asc' ? '↑' : '↓')}
                             </th>
                             <th 
-                                className="py-3 border-0 cursor-pointer user-select-none" 
+                                className="py-3 border-0 user-select-none" 
                                 onClick={() => handleSort('passingYear')}
                                 style={{ cursor: 'pointer' }}
                             >
                                 Batch {sortColumn === 'passingYear' && (sortDirection === 'asc' ? '↑' : '↓')}
                             </th>
                             <th 
-                                className="py-3 border-0 cursor-pointer user-select-none" 
+                                className="py-3 border-0 user-select-none" 
                                 onClick={() => handleSort('createdAt')}
                                 style={{ cursor: 'pointer' }}
                             >

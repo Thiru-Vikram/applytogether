@@ -3,31 +3,31 @@ import { Container, Row, Col } from "react-bootstrap";
 
 const Footer = () => {
   return (
-    <footer className="site-footer border-top">
+    <footer className="bg-light border-top py-5 mt-0">
       <Container>
         <Row className="g-4 align-items-start">
           <Col lg={6} md={12}>
-            <h4 className="site-footer-brand mb-3">ApplyTogether</h4>
-            <p className="site-footer-copy mb-3">
+            <h4 className="fw-bold text-dark mb-3">ApplyTogether</h4>
+            <p className="text-secondary mb-3">
               © 2026 ApplyTogether. Precision in career collaboration.
               <br />
               Building the tools for the next generation of builders.
             </p>
-            <div className="site-footer-icons d-flex gap-3">
-              <a href="#" aria-label="Global" className="site-footer-icon-link">
+            <div className="d-flex gap-3">
+              <a href="#" aria-label="Global" className="text-secondary">
                 <i className="bi bi-globe2"></i>
               </a>
               <a
                 href="#"
                 aria-label="Community"
-                className="site-footer-icon-link"
+                className="text-secondary"
               >
                 <i className="bi bi-bezier2"></i>
               </a>
               <a
                 href="mailto:support@applytogether.app"
                 aria-label="Email"
-                className="site-footer-icon-link"
+                className="text-secondary"
               >
                 <i className="bi bi-envelope"></i>
               </a>
@@ -35,27 +35,31 @@ const Footer = () => {
           </Col>
 
           <Col lg={3} md={6}>
-            <h6 className="site-footer-heading mb-3">PLATFORM</h6>
+            <h6 className="fw-bold small text-uppercase text-dark mb-3">
+              Platform
+            </h6>
             <div className="d-flex flex-column gap-2">
-              <a href="#" className="site-footer-link">
+              <a href="#" className="text-secondary text-decoration-none">
                 Blog
               </a>
-              <a href="/jobs" className="site-footer-link">
+              <a href="/jobs" className="text-secondary text-decoration-none">
                 Jobs
               </a>
-              <a href="#" className="site-footer-link">
+              <a href="#" className="text-secondary text-decoration-none">
                 Help Center
               </a>
             </div>
           </Col>
 
           <Col lg={3} md={6}>
-            <h6 className="site-footer-heading mb-3">LEGAL</h6>
+            <h6 className="fw-bold small text-uppercase text-dark mb-3">
+              Legal
+            </h6>
             <div className="d-flex flex-column gap-2">
-              <a href="#" className="site-footer-link">
+              <a href="#" className="text-secondary text-decoration-none">
                 Privacy Policy
               </a>
-              <a href="#" className="site-footer-link">
+              <a href="#" className="text-secondary text-decoration-none">
                 Terms of Service
               </a>
             </div>

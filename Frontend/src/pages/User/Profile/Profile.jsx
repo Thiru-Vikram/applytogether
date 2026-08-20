@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Container,
   Row,
@@ -6,19 +6,16 @@ import {
   Card,
   Button,
   Spinner,
-  Image,
   Modal,
   Badge,
 } from "react-bootstrap";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import api from "../api/axios";
-import { useAuth } from "../context/AuthContext";
-import Navbar from "../components/Navbar";
-import NotificationDrawer from "../components/NotificationDrawer";
-import StatCard from "../components/common/StatCard";
+import api from "../../../api/axios";
+import { useAuth } from "../../../context/AuthContext";
+import NotificationDrawer from "../../../components/NotificationDrawer";
 
 const Profile = () => {
-  const { userId } = useParams(); // URL usually /u/:userId
+  const { userId } = useParams();
   const { user: currentUser } = useAuth();
   const navigate = useNavigate();
 
@@ -44,10 +41,7 @@ const Profile = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [hasUnread, setHasUnread] = useState(false);
 
-  // If no userId in URL, assume it's "my" profile?
-  // Usually logic is handled in App.jsx or we redirect.
-  // But let's handle the case if userId param is present.
-  const targetUserId = userId || (currentUser && currentUser.userId); // Adjust based on how you store user in context
+  const targetUserId = userId || (currentUser && currentUser.userId);
 
   // Relationship State (for Modal UI)
   const [myFollowingIds, setMyFollowingIds] = useState(new Set());
@@ -59,7 +53,6 @@ const Profile = () => {
     }
   }, [currentUser]);
 
-  // Check for unread notifications
   useEffect(() => {
     if (
       currentUser &&
@@ -82,7 +75,6 @@ const Profile = () => {
 
   const fetchMyRelationships = async () => {
     try {
-      // Optimize: create endpoints for just IDs if list is huge, but for now fetch all
       const [followingRes, followersRes] = await Promise.all([
         api.get(`/users/${currentUser.userId}/following`),
         api.get(`/users/${currentUser.userId}/followers`),
@@ -103,15 +95,12 @@ const Profile = () => {
   const fetchProfileData = async () => {
     setLoading(true);
     try {
-      // 1. Get User Details
       const userRes = await api.get(`/users/${targetUserId}`);
       setProfileUser(userRes.data);
 
-      // 2. Get Jobs posted by this user
       const jobsRes = await api.get(`/jobs/user/${targetUserId}`);
       setJobs(jobsRes.data.content || []);
 
-      // 3. Get Follow Counts
       const followersRes = await api.get(
         `/users/${targetUserId}/followers/count`,
       );
@@ -122,7 +111,6 @@ const Profile = () => {
       );
       setFollowingCount(followingRes.data);
 
-      // 4. Get Applications (only if it's my profile)
       if (
         currentUser &&
         currentUser.userId.toString() === targetUserId.toString()
@@ -131,7 +119,6 @@ const Profile = () => {
         setApplications(appsRes.data);
       }
 
-      // 5. Check if I am following them (only if looking at someone else)
       if (
         currentUser &&
         currentUser.userId.toString() !== targetUserId.toString()
@@ -155,19 +142,11 @@ const Profile = () => {
       if (isFollowing) {
         await api.post(`/users/${targetUserId}/unfollow`);
         setFollowersCount((prev) => prev - 1);
-        // Update local Set
         const newSet = new Set(myFollowingIds);
         newSet.delete(parseInt(targetUserId));
         setMyFollowingIds(newSet);
       } else {
         await api.post(`/users/${targetUserId}/follow`);
-        // Note: If follow is PENDING, we shouldn't increment count or show Following immediately ideally,
-        // but for simplicity/user feedback we often do.
-        // However, since we now have request logic, maybe we show "Requested"?
-        // The current backend makes it PENDING.
-        // Let's assume for main profile button we keep simple "Following" or "Requested".
-        // Ideally API returns status.
-        // For now, let's just toggle.
         setFollowersCount((prev) => prev + 1);
         const newSet = new Set(myFollowingIds);
         newSet.add(parseInt(targetUserId));
@@ -232,9 +211,8 @@ const Profile = () => {
     setModalUsers([]);
   };
 
-  // Helper to determine relationship status with a user in the list
   const getRelationshipButton = (user) => {
-    if (!currentUser || user.id === currentUser.userId) return null; // Me
+    if (!currentUser || user.id === currentUser.userId) return null;
 
     const iFollowThem = myFollowingIds.has(user.id);
     const theyFollowMe = myFollowerIds.has(user.id);
@@ -303,17 +281,23 @@ const Profile = () => {
   const isMyProfile =
     currentUser && currentUser.userId.toString() === targetUserId.toString();
 
-
   return (
     <Container className="py-5">
       {/* Profile Header Block */}
       <div className="text-center mb-5">
-        <h1 className="fw-bold mb-3 display-5">{isMyProfile ? "My Profile" : "User Profile"}</h1>
-        <p className="text-muted fs-6">Manage your professional presence and track your contributions.</p>
+        <h1 className="fw-bold mb-3 display-5">
+          {isMyProfile ? "My Profile" : "User Profile"}
+        </h1>
+        <p className="text-muted fs-6">
+          Manage your professional presence and track your contributions.
+        </p>
       </div>
 
       <div className="mb-5">
-        <Card className="border-0 shadow-sm rounded-4 overflow-hidden position-relative">
+        <Card
+          className="bg-white rounded-4 shadow-sm overflow-hidden position-relative"
+          style={{ border: "1px solid #e2e8f0" }}
+        >
           <Card.Body className="p-4">
             <div className="d-flex flex-column flex-md-row align-items-center gap-4 text-center text-md-start">
               {/* Avatar */}
@@ -323,7 +307,8 @@ const Profile = () => {
                   width: "110px",
                   height: "110px",
                   fontSize: "3rem",
-                  background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                  background:
+                    "linear-gradient(135deg, #4f46e5 0%, #818cf8 100%)",
                   zIndex: 2,
                 }}
               >
@@ -333,40 +318,44 @@ const Profile = () => {
               </div>
 
               <div className="flex-grow-1">
-                <h2 className="fw-black mb-1" style={{ color: "#1e293b", fontSize: "1.75rem" }}>
-                  {profileUser.fullName || profileUser.username}
-                </h2>
-                <p className="text-muted mb-4 fw-medium">
-                  @{profileUser.username}
-                </p>
+                {/* Username + Action Buttons row */}
+                <div className="d-flex flex-wrap align-items-center gap-3 mb-3 justify-content-center justify-content-md-start">
+                  <h2
+                    className="fw-bold mb-0 text-dark"
+                    style={{ fontSize: "1.5rem" }}
+                  >
+                    @{profileUser.username}
+                  </h2>
 
-                <div className="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start">
                   {!isMyProfile && (
                     <Button
                       variant={isFollowing ? "outline-secondary" : "primary"}
                       onClick={handleFollowToggle}
                       disabled={actionLoading}
-                      className="rounded-pill px-4 py-2 fw-bold shadow-sm"
+                      className="rounded-pill px-4 py-1 fw-bold shadow-sm"
+                      size="sm"
                     >
                       {isFollowing ? "Following" : "Follow"}
                     </Button>
                   )}
                   {isMyProfile && (
-                    <div className="d-flex gap-3">
+                    <div className="d-flex align-items-center gap-2">
                       <Button
                         as={Link}
                         to="/post-job"
                         variant="primary"
-                        className="rounded-pill px-4 py-2 fw-bold shadow-sm"
+                        size="sm"
+                        className="rounded-pill px-3 py-1 fw-bold shadow-sm"
                       >
-                        <i className="bi bi-plus-lg me-2"></i>Post a Job
+                        <i className="bi bi-plus-lg me-1"></i>Post a Job
                       </Button>
                       <div
-                        className="p-2 rounded-circle bg-light shadow-sm d-flex align-items-center justify-content-center cursor-pointer hover-shadow transition"
+                        className="p-1 rounded-circle bg-light shadow-sm d-flex align-items-center justify-content-center border"
                         style={{
-                          width: "48px",
-                          height: "48px",
+                          width: "36px",
+                          height: "36px",
                           cursor: "pointer",
+                          borderColor: "#e2e8f0",
                         }}
                         onClick={() => {
                           setShowNotifications(true);
@@ -374,71 +363,61 @@ const Profile = () => {
                         }}
                       >
                         <i
-                          className={`bi bi-bell-fill fs-4 ${hasUnread ? "text-danger" : "text-primary"}`}
+                          className={`bi bi-bell-fill fs-5 ${hasUnread ? "text-danger" : "text-primary"}`}
                         ></i>
                       </div>
                     </div>
                   )}
                 </div>
+
+                {/* Instagram-style Inline Stats */}
+                <div className="d-flex align-items-center gap-4 mb-3 justify-content-center justify-content-md-start fs-6">
+                  <span>
+                    <strong className="text-dark fw-bold">{jobs.length}</strong>{" "}
+                    <span className="text-secondary">posts</span>
+                  </span>
+                  <span
+                    onClick={openFollowersModal}
+                    style={{ cursor: "pointer" }}
+                    className="text-decoration-none"
+                  >
+                    <strong className="text-dark fw-bold">{followersCount}</strong>{" "}
+                    <span className="text-secondary">followers</span>
+                  </span>
+                  <span
+                    onClick={openFollowingModal}
+                    style={{ cursor: "pointer" }}
+                    className="text-decoration-none"
+                  >
+                    <strong className="text-dark fw-bold">{followingCount}</strong>{" "}
+                    <span className="text-secondary">following</span>
+                  </span>
+                </div>
+
+                {/* Full name */}
+                {profileUser.fullName && (
+                  <div className="fw-semibold text-dark">
+                    {profileUser.fullName}
+                  </div>
+                )}
               </div>
             </div>
           </Card.Body>
         </Card>
       </div>
 
-      {/* Stats Row */}
-      <Row className="g-4 mb-5">
-        <Col xs={12} sm={6} md={isMyProfile ? 3 : 4}>
-          <StatCard
-            title="Posts"
-            value={jobs.length}
-            icon="grid"
-            color="primary"
-          />
-        </Col>
-        <Col xs={12} sm={6} md={isMyProfile ? 3 : 4}>
-          <div onClick={openFollowersModal} style={{ cursor: "pointer" }} className="h-100">
-            <StatCard
-              title="Followers"
-              value={followersCount}
-              icon="people"
-              color="success"
-            />
-          </div>
-        </Col>
-        <Col xs={12} sm={6} md={isMyProfile ? 3 : 4}>
-          <div onClick={openFollowingModal} style={{ cursor: "pointer" }} className="h-100">
-            <StatCard
-              title="Following"
-              value={followingCount}
-              icon="person-plus"
-              color="info"
-            />
-          </div>
-        </Col>
-        {isMyProfile && (
-          <Col xs={12} sm={6} md={3}>
-            <Link to="/applications" className="text-decoration-none h-100 d-block">
-              <StatCard
-                title="Applications"
-                value={applications.length}
-                icon="file-earmark-text"
-                color="warning"
-              />
-            </Link>
-          </Col>
-        )}
-      </Row>
-
-      <hr className="my-5" />
+      {/* Posts Section */}
 
       {/* Posts Section */}
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h4 className="fw-black mb-0">Posts</h4>
+        <h4 className="fw-bold mb-0">Posts</h4>
       </div>
 
       {jobs.length === 0 ? (
-        <div className="text-center py-5 bg-white rounded-4 shadow-sm border-0">
+        <div
+          className="text-center py-5 bg-white rounded-4 shadow-sm"
+          style={{ border: "1px solid #e2e8f0" }}
+        >
           <div className="mb-4">
             <i
               className="bi bi-grid-3x3-gap"
@@ -456,23 +435,26 @@ const Profile = () => {
         <Row className="g-4">
           {jobs.map((job) => (
             <Col key={job.id} xs={12} md={6} lg={4}>
-              <Card className="h-100 shadow-sm border-0 rounded-4 transition hover-shadow overflow-hidden">
+              <Card
+                className="h-100 bg-white shadow-sm rounded-4 overflow-hidden"
+                style={{ border: "1px solid #e2e8f0" }}
+              >
                 <Card.Body className="p-4 d-flex flex-column">
                   <div className="d-flex align-items-center mb-3">
                     <div
-                      className="rounded-circle d-flex justify-content-center align-items-center text-white fw-bold shadow-sm me-3"
+                      className="rounded-circle d-flex justify-content-center align-items-center text-white fw-bold shadow-sm me-3 flex-shrink-0"
                       style={{
                         width: "40px",
                         height: "40px",
                         fontSize: "1rem",
                         background:
-                          "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                          "linear-gradient(135deg, #4f46e5 0%, #818cf8 100%)",
                       }}
                     >
                       {(job.company?.[0] || "?").toUpperCase()}
                     </div>
                     <div className="overflow-hidden">
-                      <h6 className="fw-bold mb-0 text-truncate">
+                      <h6 className="fw-bold mb-0 text-truncate text-dark">
                         {job.title}
                       </h6>
                       <p className="text-primary fw-bold mb-0 small text-truncate">
@@ -550,7 +532,7 @@ const Profile = () => {
               {modalUsers.map((user) => (
                 <div
                   key={user.id}
-                  className="list-group-item border-0 d-flex align-items-center gap-3 py-3 px-4 hover-bg-light transition"
+                  className="list-group-item border-0 d-flex align-items-center gap-3 py-3 px-4"
                 >
                   <Link
                     to={`/u/${user.id}`}
@@ -564,7 +546,7 @@ const Profile = () => {
                         height: "45px",
                         fontSize: "1.1rem",
                         background:
-                          "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                          "linear-gradient(135deg, #4f46e5 0%, #818cf8 100%)",
                       }}
                     >
                       {user.fullName

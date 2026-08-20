@@ -13,7 +13,7 @@ import {
   Tabs,
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import api from "../api/axios";
+import api from "../../../api/axios";
 
 const SearchUsers = () => {
   const [query, setQuery] = useState("");
@@ -38,7 +38,7 @@ const SearchUsers = () => {
         api.get("/jobs"),
         api.get("/applications/my-applications"),
       ]);
-      setGlobalJobs(jobsRes.data?.content || []); // ✅ FIXED
+      setGlobalJobs(jobsRes.data?.content || []);
       const appliedIds = (appsRes.data || [])
         .filter((app) => app && app.job)
         .map((app) => app.job.id);
@@ -92,17 +92,23 @@ const SearchUsers = () => {
   const totalPeople = results.length;
 
   const StatCard = ({ title, value, icon, color }) => (
-    <Card className="border-0 shadow-sm h-100 rounded-4 transition hover-shadow">
+    <Card
+      className="bg-white shadow-sm h-100 rounded-4"
+      style={{ border: "1px solid #e2e8f0" }}
+    >
       <Card.Body className="p-4">
         <div className="d-flex align-items-center justify-content-between">
           <div>
-            <p className="text-secondary small fw-bold mb-1 text-uppercase tracking-wider">
+            <p className="text-secondary small fw-bold mb-1 text-uppercase">
               {title}
             </p>
-            <h2 className="fw-black mb-0">{value}</h2>
+            <h2 className="fw-bold mb-0 text-dark">{value}</h2>
           </div>
-          <div className={`p-3 rounded-4 bg-${color}-light text-${color}`}>
-            <i className={`bi bi-${icon} fs-3`}></i>
+          <div
+            className={`p-3 rounded-4 bg-${color} bg-opacity-10 text-${color} d-flex align-items-center justify-content-center`}
+            style={{ width: "48px", height: "48px" }}
+          >
+            <i className={`bi bi-${icon} fs-4`}></i>
           </div>
         </div>
       </Card.Body>
@@ -120,7 +126,8 @@ const SearchUsers = () => {
         <div className="mx-auto mt-4" style={{ maxWidth: "600px" }}>
           <Form
             onSubmit={handleSearch}
-            className="d-flex gap-2 p-1 bg-white rounded-pill shadow-sm border"
+            className="d-flex gap-2 p-1 bg-white rounded-pill shadow-sm"
+            style={{ border: "1px solid #cbd5e1" }}
           >
             <Form.Control
               type="text"
@@ -219,7 +226,7 @@ const SearchUsers = () => {
         id="explore-tabs"
         activeKey={key}
         onSelect={(k) => setKey(k)}
-        className="mb-5 custom-tabs justify-content-center border-0"
+        className="mb-5 justify-content-center border-0"
       >
         <Tab eventKey="jobs" title="Global Jobs">
           <div className="mt-4">
@@ -229,7 +236,10 @@ const SearchUsers = () => {
                 <p className="mt-3 text-secondary">Loading global jobs...</p>
               </div>
             ) : globalJobs.length === 0 ? (
-              <div className="text-center py-5 bg-white rounded-4 shadow-sm border-0">
+              <div
+                className="text-center py-5 bg-white rounded-4 shadow-sm"
+                style={{ border: "1px solid #e2e8f0" }}
+              >
                 <div className="mb-4">
                   <i
                     className="bi bi-briefcase"
@@ -245,11 +255,14 @@ const SearchUsers = () => {
               <Row className="g-4">
                 {globalJobs.map((job) => (
                   <Col key={job.id} xs={12} sm={12} md={6} lg={4} xl={3}>
-                    <Card className="border-0 shadow-sm hover-shadow transition rounded-4 h-100">
+                    <Card
+                      className="bg-white shadow-sm rounded-4 h-100"
+                      style={{ border: "1px solid #e2e8f0" }}
+                    >
                       <Card.Body className="p-4 d-flex flex-column">
                         <div className="d-flex align-items-center mb-3">
                           <div className="flex-grow-1 overflow-hidden">
-                            <h6 className="fw-bold mb-0 text-truncate">
+                            <h6 className="fw-bold mb-0 text-truncate text-dark">
                               {job.title}
                             </h6>
                             <p className="text-primary fw-bold mb-0 small text-truncate">
@@ -315,7 +328,7 @@ const SearchUsers = () => {
                             <Button
                               variant="primary"
                               size="sm"
-                              className="rounded-pill w-100"
+                              className="rounded-pill w-100 fw-bold"
                               onClick={() => handleMarkApplied(job.id)}
                             >
                               Mark Done
@@ -324,7 +337,7 @@ const SearchUsers = () => {
                           <Button
                             variant="outline-primary"
                             size="sm"
-                            className="rounded-pill w-100"
+                            className="rounded-pill w-100 fw-bold"
                             href={job.jobUrl}
                             target="_blank"
                           >
@@ -349,7 +362,10 @@ const SearchUsers = () => {
             )}
             {searchError && <Alert variant="danger">{searchError}</Alert>}
             {!searchLoading && !hasSearched && (
-              <div className="text-center py-5 bg-white rounded-4 shadow-sm border-0">
+              <div
+                className="text-center py-5 bg-white rounded-4 shadow-sm"
+                style={{ border: "1px solid #e2e8f0" }}
+              >
                 <div className="mb-4">
                   <i
                     className="bi bi-search"
@@ -363,7 +379,10 @@ const SearchUsers = () => {
               </div>
             )}
             {!searchLoading && hasSearched && results.length === 0 && (
-              <div className="text-center py-5 bg-white rounded-4 shadow-sm border-0">
+              <div
+                className="text-center py-5 bg-white rounded-4 shadow-sm"
+                style={{ border: "1px solid #e2e8f0" }}
+              >
                 <div className="mb-4">
                   <i
                     className="bi bi-person-x"
@@ -376,11 +395,14 @@ const SearchUsers = () => {
                 </p>
               </div>
             )}
-            <Row className="g-4">
+            <Row className="g-3">
               {results.map((user) => (
-                <Col key={user.id} xs={12} sm={6} md={6} lg={4} xl={3}>
-                  <Card className="border-0 shadow-sm hover-shadow transition h-100">
-                    <Card.Body className="d-flex align-items-center gap-3 p-4">
+                <Col key={user.id} xs={12} md={6} xl={6}>
+                  <Card
+                    className="bg-white shadow-sm h-100 rounded-4"
+                    style={{ border: "1px solid #e2e8f0" }}
+                  >
+                    <Card.Body className="d-flex align-items-center justify-content-between gap-3 p-3 p-md-4">
                       <div
                         className="rounded-circle d-flex justify-content-center align-items-center flex-shrink-0 text-white fw-bold shadow-sm"
                         style={{
@@ -388,7 +410,7 @@ const SearchUsers = () => {
                           height: "50px",
                           fontSize: "1.2rem",
                           background:
-                            "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                            "linear-gradient(135deg, #4f46e5 0%, #818cf8 100%)",
                         }}
                       >
                         {(
@@ -398,16 +420,16 @@ const SearchUsers = () => {
                         ).toUpperCase()}
                       </div>
                       <div className="flex-grow-1 overflow-hidden">
-                        <h6 className="fw-bold mb-0 text-truncate">
-                          {user.fullName || user.username}
+                        <h6 className="fw-bold mb-1 text-primary text-truncate">
+                          @{user.username}
                         </h6>
                         <p className="text-muted small mb-0 text-truncate">
-                          @{user.username}
+                          {user.fullName || "Full name not available"}
                         </p>
                       </div>
                       <Link
                         to={`/u/${user.id}`}
-                        className="btn btn-outline-primary rounded-pill btn-sm px-3 fw-bold"
+                        className="btn btn-outline-primary rounded-pill btn-sm px-3 fw-bold flex-shrink-0"
                       >
                         Profile
                       </Link>

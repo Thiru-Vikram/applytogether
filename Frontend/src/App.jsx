@@ -9,16 +9,16 @@ import { AuthProvider } from "./context/AuthContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import FindJobs from "./pages/FindJobs";
+import FindJobs from "./pages/User/FindJobs/FindJobs";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import PostJob from "./pages/PostJob";
 import AddAdmin from "./pages/AddAdmin";
 import ProtectedRoute from "./ProtectedRoute";
 import Landing from "./pages/Landing";
-import Applications from "./pages/Applications";
-import Profile from "./pages/Profile";
-import SearchUsers from "./pages/SearchUsers";
+import Applications from "./pages/User/Applications/Applications";
+import Profile from "./pages/User/Profile/Profile";
+import SearchUsers from "./pages/User/Explore/Explore";
 import AdminDashboard from "./pages/AdminDashboard";
 import UserManagement from "./pages/UserManagement";
 import JobModeration from "./pages/JobModeration";
@@ -46,7 +46,7 @@ function AppContent() {
   const showFooter = location.pathname === "/";
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-vh-100 d-flex flex-column">
       <Navbar />
       <div className="app-layout">
         <main className="main-content">

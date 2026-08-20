@@ -35,7 +35,7 @@ const PostJob = () => {
         <Container className="fade-in py-5 mt-4">
             <Row className="justify-content-center">
                 <Col md={10} lg={6}>
-                    <Card className="shadow border-0 p-4 transition hover-shadow">
+                    <Card className="shadow border-0 p-4">
                         <Card.Body>
                             <h2 className="fw-bold mb-4">Post a New Job</h2>
                             

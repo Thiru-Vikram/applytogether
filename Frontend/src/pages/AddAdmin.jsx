@@ -51,7 +51,7 @@ const AddAdmin = () => {
     <Container className="fade-in py-5 mt-4">
       <Row className="justify-content-center">
         <Col md={8} lg={5}>
-          <Card className="shadow border-0 p-4 transition hover-shadow">
+          <Card className="shadow border-0 p-4">
             <Card.Body>
               <h2 className="text-center fw-bold mb-4">Add New Admin</h2>
               <p className="text-center text-secondary small mb-4">

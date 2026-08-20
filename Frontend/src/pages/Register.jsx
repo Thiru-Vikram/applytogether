@@ -50,7 +50,7 @@ const Register = () => {
     <Container className="fade-in py-5 mt-4">
       <Row className="justify-content-center">
         <Col md={10} lg={7}>
-          <Card className="shadow border-0 p-4 transition hover-shadow">
+          <Card className="shadow border-0 p-4">
             <Card.Body>
               <h2 className="text-center fw-bold mb-4">Create Account</h2>
 

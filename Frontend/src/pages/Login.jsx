@@ -37,7 +37,7 @@ const Login = () => {
         <Container className="fade-in py-5 mt-5">
             <Row className="justify-content-center">
                 <Col md={6} lg={4}>
-                    <Card className="shadow border-0 p-4 transition hover-shadow">
+                    <Card className="shadow border-0 p-4">
                         <Card.Body>
                             <h2 className="text-center fw-bold mb-4">Welcome Back</h2>
                             

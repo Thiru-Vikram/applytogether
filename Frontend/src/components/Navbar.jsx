@@ -1,5 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { Button, NavDropdown } from "react-bootstrap";
+import React, { useState } from "react";
+import {
+  Button,
+  Container,
+  Nav,
+  Navbar as BootstrapNavbar,
+  NavDropdown,
+} from "react-bootstrap";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import AuthModal from "./AuthModal";
@@ -20,17 +26,7 @@ const Navbar = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const [scrolled, setScrolled] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 10);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useEffect(() => { setMenuOpen(false); }, [location]);
 
   const handleLogout = () => { logout(); navigate("/"); };
 
@@ -40,13 +36,15 @@ const Navbar = () => {
     const active = location.pathname === to;
     const icon = NAV_ICONS[to];
     return (
-      <Link
+      <Nav.Link
+        as={Link}
         to={to}
-        className={`tuf-nav-link${active ? " tuf-nav-link-active" : ""}`}
+        active={active}
+        className="d-flex align-items-center gap-2 fw-medium"
       >
         {icon && <i className={`bi bi-${icon}`}></i>}
         {label}
-      </Link>
+      </Nav.Link>
     );
   };
 
@@ -70,33 +68,50 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className={`tuf-navbar${scrolled ? " tuf-navbar-scrolled" : ""}`}>
-        {/* Logo */}
-        <Link to="/" className="tuf-brand">
-          <span className="tuf-brand-icon">
-            <i className="bi bi-people-fill"></i>
-          </span>
-          ApplyTogether
-        </Link>
+      <BootstrapNavbar
+        expand="lg"
+        sticky="top"
+        bg="white"
+        className="border-bottom shadow-sm py-3"
+      >
+        <Container>
+          <BootstrapNavbar.Brand
+            as={Link}
+            to="/"
+            className="d-flex align-items-center gap-2 fw-bold text-primary"
+          >
+            <span className="d-inline-flex align-items-center justify-content-center bg-primary text-white rounded-3 p-2 lh-1">
+              <i className="bi bi-people-fill"></i>
+            </span>
+            ApplyTogether
+          </BootstrapNavbar.Brand>
 
-        {/* Centre links — desktop only */}
-        {user && (
-          <div className="tuf-center-links">
-            {userLinks.map((l) => (
-              <NavLink key={l.to} to={l.to} label={l.label} />
-            ))}
-          </div>
-        )}
+          {user && <BootstrapNavbar.Toggle aria-controls="main-navbar" />}
 
-        {/* Right actions */}
-        <div className="tuf-right">
+          <BootstrapNavbar.Collapse id="main-navbar">
+            {user && (
+              <Nav className="mx-auto gap-lg-2 my-3 my-lg-0">
+                {userLinks.map((l) => (
+                  <NavLink key={l.to} to={l.to} label={l.label} />
+                ))}
+              </Nav>
+            )}
+          </BootstrapNavbar.Collapse>
+
+          <div className="d-flex align-items-center gap-2 ms-auto">
           {user ? (
             <NavDropdown
               title={
-                <span className="tuf-avatar">{avatar}</span>
+                <span
+                  className="d-inline-flex align-items-center justify-content-center bg-primary text-white rounded-circle fw-bold shadow-sm"
+                  style={{ width: "38px", height: "38px", minWidth: "38px" }}
+                >
+                  {avatar}
+                </span>
               }
-              id="tuf-user-dropdown"
+              id="user-dropdown"
               align="end"
+              className="d-flex align-items-center"
             >
               <NavDropdown.Header className="fw-bold">
                 {user.username}
@@ -107,39 +122,17 @@ const Navbar = () => {
               </NavDropdown.Item>
             </NavDropdown>
           ) : (
-            <button
-              className="tuf-cta-btn"
+            <Button
+              variant="primary"
+              className="rounded-pill px-4 fw-bold"
               onClick={() => setShowAuthModal(true)}
             >
               Get Started
-            </button>
+            </Button>
           )}
-
-          {/* Hamburger — mobile only */}
-          <button
-            className="tuf-hamburger d-lg-none"
-            onClick={() => setMenuOpen((o) => !o)}
-            aria-label="Toggle menu"
-          >
-            <i className={`bi bi-${menuOpen ? "x-lg" : "list"}`}></i>
-          </button>
-        </div>
-      </nav>
-
-      {/* Mobile drawer */}
-      {menuOpen && user && (
-        <div className="tuf-mobile-menu">
-          {userLinks.map((l) => (
-            <NavLink key={l.to} to={l.to} label={l.label} />
-          ))}
-          <button
-            className="tuf-mobile-logout"
-            onClick={() => { handleLogout(); setMenuOpen(false); }}
-          >
-            <i className="bi bi-box-arrow-right me-2"></i>Logout
-          </button>
-        </div>
-      )}
+          </div>
+        </Container>
+      </BootstrapNavbar>
 
       <AuthModal show={showAuthModal} onHide={() => setShowAuthModal(false)} />
     </>

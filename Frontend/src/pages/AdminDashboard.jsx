@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Navbar, Nav, Button, Spinner, Table, Badge } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button, Spinner, Badge } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import api from '../api/axios';
 import { 
@@ -44,7 +44,7 @@ const AdminDashboard = () => {
         <Container className="py-5">
             <div className="d-flex justify-content-between align-items-end mb-5">
                 <div>
-                    <h1 className="fw-black display-5 mb-2">Admin Dashboard</h1>
+                    <h1 className="fw-bold display-5 mb-2">Admin Dashboard</h1>
                     <p className="text-muted fs-5 mb-0">Overview of platform performance and activity.</p>
                 </div>
                 <div className="d-flex gap-3">
@@ -163,7 +163,7 @@ const AdminDashboard = () => {
                                 {activity.map((item, idx) => (
                                     <div key={idx} className="d-flex gap-3 mb-4 last-mb-0">
                                         <div className="flex-shrink-0">
-                                            <div className={`p-2 rounded-circle bg-${item.type === 'USER_REGISTERED' ? 'primary' : 'success'}-light text-${item.type === 'USER_REGISTERED' ? 'primary' : 'success'} shadow-sm d-flex align-items-center justify-content-center`} style={{ width: '40px', height: '40px' }}>
+                                            <div className={`p-2 rounded-circle bg-${item.type === 'USER_REGISTERED' ? 'primary' : 'success'} bg-opacity-10 text-${item.type === 'USER_REGISTERED' ? 'primary' : 'success'} shadow-sm d-flex align-items-center justify-content-center`} style={{ width: '40px', height: '40px' }}>
                                                 <i className={`bi bi-${item.type === 'USER_REGISTERED' ? 'person-plus' : 'briefcase'}`}></i>
                                             </div>
                                         </div>
@@ -185,19 +185,19 @@ const AdminDashboard = () => {
                 <Col lg={4}>
                     <Card className="border-0 shadow-sm rounded-4 mb-4">
                         <Card.Body className="p-4 text-center">
-                            <h5 className="text-secondary small fw-bold mb-3 text-uppercase tracking-wider">New Users (Week)</h5>
-                            <h1 className="fw-black text-primary mb-0">+{stats?.newUsersThisWeek}</h1>
+                            <h5 className="text-secondary small fw-bold mb-3 text-uppercase">New Users (Week)</h5>
+                            <h1 className="fw-bold text-primary mb-0">+{stats?.newUsersThisWeek}</h1>
                         </Card.Body>
                     </Card>
                     <Card className="border-0 shadow-sm rounded-4">
                         <Card.Body className="p-4 text-center">
-                            <h5 className="text-secondary small fw-bold mb-3 text-uppercase tracking-wider">New Users (Month)</h5>
-                            <h1 className="fw-black text-primary mb-0">+{stats?.newUsersThisMonth}</h1>
+                            <h5 className="text-secondary small fw-bold mb-3 text-uppercase">New Users (Month)</h5>
+                            <h1 className="fw-bold text-primary mb-0">+{stats?.newUsersThisMonth}</h1>
                         </Card.Body>
                     </Card>
 
                     <div className="mt-4">
-                        <Card className="border-0 shadow-sm rounded-4 bg-indigo-light">
+                        <Card className="border-0 shadow-sm rounded-4 bg-primary bg-opacity-10">
                             <Card.Body className="p-4 text-center">
                                 <h5 className="fw-bold mb-2">Platform Status</h5>
                                 <Badge bg="success" className="rounded-pill px-3 py-2">LIVE & ACTIVE</Badge>
